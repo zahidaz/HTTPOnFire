@@ -1,0 +1,208 @@
+<resources>
+    <string name="app_name">HTTP on Fire</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_logs">Logs</string>
+
+    <!-- Server Status -->
+
+    <string name="server_status_running">Running</string>
+    <string name="server_status_stopped">Stopped</string>
+    <string name="server_status_error">Error</string>
+    <string name="server_url_localhost">localhost:%d</string>
+
+    <!-- Common Actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_done">Done</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_share">Share</string>
+    <string name="action_details">Details</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_disable">Disable</string>
+    <string name="action_close">Close</string>
+    <string name="action_back">Back</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_change">Change</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_copy">Copy</string>
+    <string name="action_clear">Clear</string>
+
+    <!-- Route Types -->
+    <string name="route_type_files">FILES</string>
+    <string name="route_type_redirect">REDIRECT</string>
+    <string name="route_type_proxy">PROXY</string>
+    <string name="route_type_status">STATUS</string>
+    <string name="route_type_openapi">OPENAPI</string>
+    <string name="route_type_docs">DOCS</string>
+
+    <!-- Route Management -->
+    <string name="route_create_title">Create New Link</string>
+    <string name="route_api_title">Custom Response</string>
+    <string name="route_filesystem_title">File Sharing Link</string>
+    <string name="route_type_file_folder">Files &amp; Folders</string>
+    <string name="route_type_file_folder_desc">Share files or folders from your device</string>
+    <string name="route_type_custom_response">Custom Response</string>
+    <string name="route_type_custom_response_desc">Create a custom http response</string>
+
+    <!-- File System Route Builder -->
+    <string name="filesystem_select_what_to_share">Choose what to share</string>
+    <string name="filesystem_instruction">Pick a file or folder from your device to share</string>
+    <string name="filesystem_select_file">Choose File</string>
+    <string name="filesystem_select_folder">Choose Folder</string>
+    <string name="filesystem_sharing_file">Sharing file</string>
+    <string name="filesystem_sharing_folder">Sharing folder</string>
+    <string name="filesystem_share_as">Share as: </string>
+    <string name="filesystem_available_at">Available at: </string>
+    <string name="filesystem_directory_options">Folder Settings</string>
+    <string name="filesystem_respect_index">Show homepage files</string>
+    <string name="filesystem_respect_index_desc">Automatically send index.html file when someone visits a folder</string>
+
+    <!-- API Route Builder -->
+    <string name="api_basic_info">Basic Information</string>
+    <string name="api_field_path">Link Address</string>
+    <string name="api_field_path_placeholder">/my-link</string>
+    <string name="api_field_path_help">The web address for your link (must start with \'/\')</string>
+    <string name="api_field_description">Description (Optional)</string>
+    <string name="api_field_description_placeholder">What does this link do?</string>
+    <string name="api_http_method">Request Method</string>
+    <string name="api_response_config">Response Settings</string>
+    <string name="api_response_body">Content to Return</string>
+    <string name="api_response_body_placeholder">Enter the content you want to return…</string>
+    <string name="api_response_body_help">Can be text, JSON, XML, or any other content</string>
+    <string name="api_status_code">Response Code</string>
+    <string name="api_status_code_placeholder">200</string>
+    <string name="api_custom_headers">Advanced Headers</string>
+    <string name="api_add_header">Add Header</string>
+    <string name="api_header_name">Header Name</string>
+    <string name="api_header_name_placeholder">Content-Type</string>
+    <string name="api_header_value">Header Value</string>
+    <string name="api_header_value_placeholder">application/json</string>
+
+    <!-- HTTP Status Codes -->
+    <string name="http_status_200">OK</string>
+    <string name="http_status_201">Created</string>
+    <string name="http_status_204">No Content</string>
+    <string name="http_status_400">Bad Request</string>
+    <string name="http_status_401">Unauthorized</string>
+    <string name="http_status_403">Forbidden</string>
+    <string name="http_status_404">Not Found</string>
+    <string name="http_status_500">Internal Server Error</string>
+
+    <!-- Home Screen -->
+    <string name="home_tab_user">My Links</string>
+    <string name="home_tab_system">Built-in</string>
+    <string name="home_empty_title">No links created yet</string>
+    <string name="home_empty_subtitle">Tap the + button to create your first link</string>
+
+    <!-- Logs Screen -->
+    <string name="logs_title">Activity Log (%d)</string>
+    <string name="logs_search_placeholder">Search activity…</string>
+    <string name="logs_disabled_title">Activity logging is off</string>
+    <string name="logs_disabled_subtitle">Turn on logging in settings to see who visits your server</string>
+    <string name="logs_empty_title">No activity yet</string>
+    <string name="logs_filter_all_methods">All Types</string>
+    <string name="logs_clear_dialog_title">Clear All Activity</string>
+    <string name="logs_clear_dialog_message">This will permanently delete all activity logs. This action cannot be undone.</string>
+    <string name="logs_statistics_title">Activity Statistics</string>
+    <string name="logs_details_title">Visit Details</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_server_config">Server Settings</string>
+    <string name="settings_default_port">Network Port</string>
+    <string name="settings_default_port_help">Port number for your server (1–65535)</string>
+    <string name="settings_auto_start">Start automatically</string>
+    <string name="settings_auto_start_desc">Start the server when you open the app</string>
+    <string name="settings_run_background">Keep running in background</string>
+    <string name="settings_run_background_desc">Keep your server running even when the app is closed</string>
+    <string name="settings_enable_logging">Track visitor activity</string>
+    <string name="settings_enable_logging_desc">Keep a log of who visits your server and when</string>
+    <string name="settings_log_management">Activity History</string>
+    <string name="settings_log_retention">Keep history for (Days)</string>
+    <string name="settings_log_retention_help">How many days to keep activity logs (1–365)</string>
+    <string name="settings_max_log_entries">Maximum history entries</string>
+    <string name="settings_max_log_entries_help">Maximum number of activity entries to store (100–100000)</string>
+    <string name="settings_auto_cleanup">Automatic cleanup</string>
+    <string name="settings_auto_cleanup_desc">Automatically remove old activity logs to free up space</string>
+    <string name="settings_advanced">Advanced Settings</string>
+    <string name="settings_cors_config">Cross-Origin Access</string>
+    <string name="settings_allow_any_host">Allow access from any website</string>
+    <string name="settings_allow_any_host_desc">Let any website access your server (less secure)</string>
+    <string name="settings_allowed_hosts">Allowed websites</string>
+    <string name="settings_allowed_hosts_help">Enter website addresses separated by commas: example.com, app.com</string>
+    <string name="settings_allow_credentials">Allow login credentials</string>
+    <string name="settings_allow_credentials_desc">Allow websites to send login information and cookies</string>
+    <string name="settings_saving">Saving…</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_welcome_title">Welcome to HTTP on Fire!</string>
+    <string name="dialog_welcome_message">Enable notifications to keep your server running in the background when the app is closed.</string>
+    <string name="dialog_welcome_note">You can change this setting later in the app settings.</string>
+    <string name="dialog_permission_title">Background Service Disabled</string>
+    <string name="dialog_permission_message">Notification permission is required to run the server in the background.</string>
+    <string name="dialog_permission_instruction">Please enable notifications in Settings → Permissions → Notifications</string>
+    <string name="dialog_open_settings">Open Settings</string>
+
+    <!-- Share Dialog -->
+    <string name="share_title">Share</string>
+    <string name="share_any_of">Any of</string>
+    <string name="share_server_not_running">Server not running</string>
+    <string name="share_start_server_route">Start the server to share this Route</string>
+    <string name="share_start_server_general">Start the server to share access URLs</string>
+    <string name="share_network_local">Local</string>
+    <string name="share_network_wifi">WiFi</string>
+
+    <!-- Details Dialog -->
+    <string name="details_title">Details</string>
+    <string name="details_path">Path</string>
+    <string name="details_enabled">Enabled</string>
+    <string name="details_disabled">Disabled</string>
+    <string name="details_api_config">API Configuration</string>
+    <string name="details_status_code">Status Code</string>
+    <string name="details_headers">Headers:</string>
+    <string name="details_response_body">Response Body:</string>
+    <string name="details_file_config">File Configuration</string>
+    <string name="details_file_path">File Path</string>
+    <string name="details_mime_type">MIME Type</string>
+    <string name="details_directory_config">Directory Configuration</string>
+    <string name="details_directory_path">Directory Path</string>
+    <string name="details_allow_browsing">Allow Browsing</string>
+    <string name="details_index_file">Index File</string>
+    <string name="details_redirect_config">Redirect Configuration</string>
+    <string name="details_target_url">Target URL</string>
+    <string name="details_permanent">Permanent</string>
+    <string name="details_temporary">Temporary</string>
+    <string name="details_proxy_config">Proxy Configuration</string>
+    <string name="details_preserve_host">Preserve Host Header</string>
+    <string name="details_timeout">Timeout</string>
+    <string name="details_builtin_route">Built-in Route</string>
+    <string name="details_builtin_route_desc">This is a built-in Route that provides core server functionality.</string>
+    <string name="details_yes">Yes</string>
+    <string name="details_no">No</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_notifications">Notifications</string>
+    <string name="cd_statistics">Statistics</string>
+    <string name="cd_filter">Filter</string>
+    <string name="cd_copy_all_logs">Copy All Logs</string>
+    <string name="cd_clear_all_logs">Clear All Logs</string>
+    <string name="cd_more_options">More options</string>
+    <string name="cd_qr_code">QR Code</string>
+    <string name="cd_show_qr_code">Show QR Code</string>
+    <string name="cd_copy_url">Copy URL</string>
+    <string name="cd_share_server_url">Share Server URL</string>
+    <string name="cd_start_stop_server">%s Server</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_http_method">%s HTTP method</string>
+    <string name="cd_http_status_code">HTTP status code %d</string>
+    <string name="cd_route_type">%s Route type</string>
+    <string name="cd_remove_header">Remove header</string>
+    <string name="cd_add_route">Add Link</string>
+
+    <!-- Server Actions -->
+    <string name="server_start">Start</string>
+    <string name="server_stop">Stop</string>
+</resources>
