@@ -24,9 +24,7 @@ internal fun Application.configureServerWithSettings(
     configureContentNegotiation()
     configureStatusPages()
 
-    if (config.enableOpenApi) {
-        install(OpenApi)
-    }
+    install(OpenApi)
 
     if (config.enableLogs) {
         configureLogging(config)

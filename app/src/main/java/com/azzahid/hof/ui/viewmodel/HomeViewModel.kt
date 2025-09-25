@@ -7,10 +7,8 @@ import com.azzahid.hof.data.repository.NetworkRepository
 import com.azzahid.hof.data.repository.RouteRepository
 import com.azzahid.hof.data.repository.SettingsRepository
 import com.azzahid.hof.domain.model.Route
-import com.azzahid.hof.domain.model.RouteType
 import com.azzahid.hof.domain.state.HomeUiState
 import com.azzahid.hof.domain.state.ServerStatus
-import com.azzahid.hof.features.http.ServerConfigurationService
 import com.azzahid.hof.services.ClipboardService
 import com.azzahid.hof.services.QRCodeService
 import com.azzahid.hof.services.ServerServiceManager
@@ -18,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -28,7 +25,6 @@ class HomeViewModel(
     private val clipboardService: ClipboardService,
     private val qrCodeService: QRCodeService,
     private val networkRepository: NetworkRepository,
-    private val serverConfigurationService: ServerConfigurationService,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -63,11 +59,7 @@ class HomeViewModel(
 
     private fun loadRoutes() {
         viewModelScope.launch {
-            serverConfigurationService.getServerConfiguration().collect { config ->
-                val userRoutes = routeRepository.getUserRoutes().first()
-                val builtInRoutes = routeRepository.getAllBuiltInRoutes(config)
-                val allRoutes = userRoutes + builtInRoutes
-
+            routeRepository.getAllRoutes().collect { allRoutes ->
                 val previousRoutes = _uiState.value.routes
                 _uiState.value = _uiState.value.copy(routes = allRoutes)
 
@@ -110,43 +102,8 @@ class HomeViewModel(
     }
 
     fun toggleRoute(route: Route) {
-        if (route.type is RouteType.BuiltInRoute) {
-            toggleBuiltInRoute(route)
-        } else {
-            toggleUserRoute(route)
-        }
-    }
-
-    private fun toggleUserRoute(route: Route) {
         viewModelScope.launch {
-            val route = routeRepository.getRouteById(route.id)
-            route?.let {
-                routeRepository.updateRouteEnabled(route.id, !it.isEnabled)
-            }
-        }
-    }
-
-    private fun toggleBuiltInRoute(route: Route) {
-        viewModelScope.launch {
-            when (route.type) {
-                is RouteType.SwaggerRoute -> {
-                    settingsRepository.updateEnableSwagger(!route.isEnabled)
-                }
-
-                is RouteType.OpenApiRoute -> {
-                    settingsRepository.updateEnableOpenApi(!route.isEnabled)
-                }
-
-                is RouteType.StatusRoute -> {
-                    settingsRepository.updateEnableStatus(!route.isEnabled)
-                }
-
-                is RouteType.NotificationRoute -> {
-                    settingsRepository.updateEnableNotification(!route.isEnabled)
-                }
-
-                else -> {}
-            }
+            routeRepository.toggleRoute(route)
         }
     }
 

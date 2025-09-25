@@ -31,7 +31,7 @@ import com.azzahid.hof.ui.viewmodel.route.FileSystemRouteBuilderViewModel
 class ViewModelFactory(private val application: Application) : ViewModelProvider.Factory {
 
     private val routeRepository by lazy {
-        RouteRepository(AppDatabase.getDatabase(application).RouteDao())
+        RouteRepository(AppDatabase.getDatabase(application).RouteDao(), settingsRepository)
     }
 
     private val settingsRepository by lazy {
@@ -89,7 +89,6 @@ class ViewModelFactory(private val application: Application) : ViewModelProvider
                     clipboardService = clipboardService,
                     qrCodeService = qrCodeService,
                     networkRepository = networkRepository,
-                    serverConfigurationService = serverConfigurationService,
                     application = application
                 ) as T
             }

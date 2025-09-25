@@ -81,9 +81,10 @@ class HttpServerService : Service() {
         networkRepository = AndroidNetworkRepository()
 
         val database = AppDatabase.getDatabase(this)
+        val settingsRepository = SettingsRepository(this)
         serverConfigurationService = ServerConfigurationService(
-            SettingsRepository(this),
-            RouteRepository(database.RouteDao()),
+            settingsRepository,
+            RouteRepository(database.RouteDao(), settingsRepository),
             HttpRequestLogRepository(database.httpRequestLogDao())
         )
 

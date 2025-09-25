@@ -3,29 +3,21 @@ package com.azzahid.hof.data.repository
 import com.azzahid.hof.data.dao.RouteDao
 import com.azzahid.hof.data.entity.toDomain
 import com.azzahid.hof.data.entity.toEntity
+import com.azzahid.hof.domain.registry.BuiltInRouteRegistry
 import com.azzahid.hof.domain.model.Route
 import com.azzahid.hof.domain.model.RouteType
-import com.azzahid.hof.domain.model.ServerConfiguration
-import io.ktor.http.HttpMethod
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
-class RouteRepository(private val routeDao: RouteDao) {
+class RouteRepository(
+    private val routeDao: RouteDao,
+    private val settingsRepository: SettingsRepository
+) {
 
-    fun getAllRoutes(): Flow<List<Route>> {
-        return routeDao.getAllRoutes().map { entities ->
-            entities.map { it.toDomain() }
-        }
-    }
 
     suspend fun getRouteById(id: String): Route? {
         return routeDao.getRouteById(id)?.toDomain()
-    }
-
-    fun getEnabledRoutes(): Flow<List<Route>> {
-        return routeDao.getEnabledRoutes().map { entities ->
-            entities.map { it.toDomain() }
-        }
     }
 
     suspend fun insertRoute(route: Route) {
@@ -64,66 +56,38 @@ class RouteRepository(private val routeDao: RouteDao) {
         routeDao.updateRouteOrder(id, order)
     }
 
-    fun getUserRoutes(): Flow<List<Route>> {
+    private fun getAllBuiltInRoutes(): Flow<List<Route>> {
+        return settingsRepository.getAllBuiltInRoutesEnabled().map { enabledStates ->
+            BuiltInRouteRegistry.routes.map { route ->
+                val routeType = route.type as RouteType.BuiltInRoute
+                route.copy(isEnabled = enabledStates[routeType] ?: true)
+            }
+        }
+    }
+
+
+    private fun getUserRoutes(): Flow<List<Route>> {
         return routeDao.getAllRoutes().map { entities ->
             entities.map { it.toDomain() }
                 .filter { !isBuiltInRoute(it) }
         }
     }
 
-    fun getAllBuiltInRoutes(config: ServerConfiguration): List<Route> {
-        val routes = mutableListOf<Route>()
+    fun getAllRoutes(): Flow<List<Route>> {
+        return combine(
+            getUserRoutes(),
+            getAllBuiltInRoutes()
+        ) { userRoutes, builtInRoutes ->
+            userRoutes + builtInRoutes
+        }
+    }
 
-        routes.add(
-            Route(
-                id = "built-in-status",
-                path = "/api/status",
-                method = HttpMethod.Get,
-                description = "Server health and status check",
-                type = RouteType.StatusRoute,
-                isEnabled = config.enableStatus,
-                order = -1000
-            )
-        )
-
-        routes.add(
-            Route(
-                id = "built-in-openapi",
-                path = "/api/json",
-                method = HttpMethod.Get,
-                description = "OpenAPI JSON specification",
-                type = RouteType.OpenApiRoute,
-                isEnabled = config.enableOpenApi,
-                order = -999
-            )
-        )
-
-        routes.add(
-            Route(
-                id = "built-in-swagger",
-                path = "/api/swagger",
-                method = HttpMethod.Get,
-                description = "Swagger UI documentation",
-                type = RouteType.SwaggerRoute,
-                isEnabled = config.enableSwagger,
-                order = -998
-            )
-        )
-
-        // TODO: when route is added here all other wiring should be automatic such as disabling and enabling
-        routes.add(
-            Route(
-                id = "built-in-notification",
-                path = "/api/notify",
-                method = HttpMethod.Post,
-                description = "Trigger device notifications",
-                type = RouteType.NotificationRoute,
-                isEnabled = config.enableNotification,
-                order = -997
-            )
-        )
-
-        return routes
+    suspend fun toggleRoute(route: Route) {
+        if (route.type is RouteType.BuiltInRoute) {
+            settingsRepository.toggleBuiltInRoute(route.type)
+        } else {
+            updateRouteEnabled(route.id, !route.isEnabled)
+        }
     }
 
 

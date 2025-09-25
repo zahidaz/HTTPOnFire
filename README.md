@@ -1,25 +1,25 @@
 <div align="center">
   <img src="docs/app_icon.png" alt="HTTP on Fire Logo" width="120">
 
-  # HTTP on Fire
+# HTTP on Fire
 
-  [![Platform](https://img.shields.io/badge/Platform-Android-FF8F00?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
-  [![License](https://img.shields.io/badge/License-Apache%202.0-E65100?style=for-the-badge)](LICENSE)
-  [![Kotlin](https://img.shields.io/badge/Kotlin-FF7043?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-  [![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-8D6E63?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-  [![Ktor](https://img.shields.io/badge/Ktor-5D4037?style=for-the-badge&logo=ktor&logoColor=white)](https://ktor.io)
+[![Platform](https://img.shields.io/badge/Platform-Android-FF8F00?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
+[![License](https://img.shields.io/badge/License-Apache%202.0-E65100?style=for-the-badge)](LICENSE)
+[![Kotlin](https://img.shields.io/badge/Kotlin-FF7043?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-8D6E63?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![Ktor](https://img.shields.io/badge/Ktor-5D4037?style=for-the-badge&logo=ktor&logoColor=white)](https://ktor.io)
 </div>
 
 No-code Android HTTP server and device management.
 
 ## Overview
 
-A professional Android HTTP server application that transforms your mobile device into a full-featured web server.
+A professional Android HTTP server application that transforms your mobile device into a
+full-featured web server.
 
 <div align="center">
   <img src="docs/hof.gif" alt="HTTP on Fire Demo">
 </div>
-
 
 ## Features
 
@@ -48,8 +48,8 @@ A professional Android HTTP server application that transforms your mobile devic
 
 ## Contributing
 
-Contributions are welcome! Whether you're fixing bugs, adding features, or improving documentation, your help is appreciated.
-
+Contributions are welcome! Whether you're fixing bugs, adding features, or improving documentation,
+your help is appreciated.
 
 ## License
 

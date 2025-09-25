@@ -74,7 +74,8 @@ internal fun io.ktor.server.routing.Route.addNotificationRoute(
                 body<Failure> {
                     example("Permission Denied") {
                         description = "User has not granted notification permission"
-                        value = Failure(error = "Notification permission required. Enable notifications in device settings.")
+                        value =
+                            Failure(error = "Notification permission required. Enable notifications in device settings.")
                     }
                 }
             }
@@ -87,7 +88,8 @@ internal fun io.ktor.server.routing.Route.addNotificationRoute(
                     }
                     example("Invalid Priority") {
                         description = "Invalid priority value provided"
-                        value = Failure(error = "Priority must be one of: MIN, LOW, DEFAULT, HIGH, MAX")
+                        value =
+                            Failure(error = "Priority must be one of: MIN, LOW, DEFAULT, HIGH, MAX")
                     }
                 }
             }
@@ -131,7 +133,12 @@ internal fun io.ktor.server.routing.Route.addNotificationRoute(
                     request.title.isBlank() -> "Title is required and cannot be blank"
                     request.body.isBlank() -> "Body is required and cannot be blank"
                     request.priority !in NotificationRequest.validPriorities ->
-                        "Priority must be one of: ${NotificationRequest.validPriorities.joinToString(", ")}"
+                        "Priority must be one of: ${
+                            NotificationRequest.validPriorities.joinToString(
+                                ", "
+                            )
+                        }"
+
                     else -> "Invalid request data"
                 }
                 call.respond(HttpStatusCode.BadRequest, Failure(error = errorMessage))

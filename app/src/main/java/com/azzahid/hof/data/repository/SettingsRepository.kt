@@ -8,7 +8,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.azzahid.hof.Constants
+import com.azzahid.hof.domain.registry.BuiltInRouteRegistry
+import com.azzahid.hof.domain.model.RouteType
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -27,10 +30,6 @@ class SettingsRepository(private val context: Context) {
         private val CORS_ALLOW_ANY_HOST_KEY = booleanPreferencesKey("cors_allow_any_host")
         private val CORS_ALLOWED_HOSTS_KEY = stringPreferencesKey("cors_allowed_hosts")
         private val CORS_ALLOW_CREDENTIALS_KEY = booleanPreferencesKey("cors_allow_credentials")
-        private val ENABLE_SWAGGER_KEY = booleanPreferencesKey("enable_swagger")
-        private val ENABLE_OPENAPI_KEY = booleanPreferencesKey("enable_openapi")
-        private val ENABLE_STATUS_KEY = booleanPreferencesKey("enable_status")
-        private val ENABLE_NOTIFICATION_KEY = booleanPreferencesKey("enable_notification")
     }
 
     val autoStart: Flow<Boolean> = context.dataStore.data
@@ -83,25 +82,16 @@ class SettingsRepository(private val context: Context) {
             preferences[CORS_ALLOW_CREDENTIALS_KEY] ?: false
         }
 
-    val enableSwagger: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[ENABLE_SWAGGER_KEY] ?: true
+    fun getAllBuiltInRoutesEnabled(): Flow<Map<RouteType.BuiltInRoute, Boolean>> {
+        return context.dataStore.data.map { preferences ->
+            BuiltInRouteRegistry.routes.associate { route ->
+                val routeType = route.type as RouteType.BuiltInRoute
+                val key = BuiltInRouteRegistry.getPreferenceKey(route)
+                val prefKey = booleanPreferencesKey(key)
+                routeType to (preferences[prefKey] ?: true)
+            }
         }
-
-    val enableOpenApi: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[ENABLE_OPENAPI_KEY] ?: true
-        }
-
-    val enableStatus: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[ENABLE_STATUS_KEY] ?: true
-        }
-
-    val enableNotification: Flow<Boolean> = context.dataStore.data
-        .map { preferences ->
-            preferences[ENABLE_NOTIFICATION_KEY] ?: true
-        }
+    }
 
     suspend fun updateAutoStart(enabled: Boolean) {
         context.dataStore.edit { preferences ->
@@ -163,27 +153,24 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
-    suspend fun updateEnableSwagger(enabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[ENABLE_SWAGGER_KEY] = enabled
+    suspend fun toggleBuiltInRoute(routeType: RouteType.BuiltInRoute) {
+        val route = BuiltInRouteRegistry.findByRouteType(routeType)
+        route?.let {
+            val key = BuiltInRouteRegistry.getPreferenceKey(it)
+            val currentValue = getBooleanPreference(key)
+            setBooleanPreference(key, !currentValue)
         }
     }
 
-    suspend fun updateEnableOpenApi(enabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[ENABLE_OPENAPI_KEY] = enabled
-        }
+    private suspend fun getBooleanPreference(key: String): Boolean {
+        val prefKey = booleanPreferencesKey(key)
+        return context.dataStore.data.first()[prefKey] ?: true
     }
 
-    suspend fun updateEnableStatus(enabled: Boolean) {
+    private suspend fun setBooleanPreference(key: String, value: Boolean) {
+        val prefKey = booleanPreferencesKey(key)
         context.dataStore.edit { preferences ->
-            preferences[ENABLE_STATUS_KEY] = enabled
-        }
-    }
-
-    suspend fun updateEnableNotification(enabled: Boolean) {
-        context.dataStore.edit { preferences ->
-            preferences[ENABLE_NOTIFICATION_KEY] = enabled
+            preferences[prefKey] = value
         }
     }
 }
