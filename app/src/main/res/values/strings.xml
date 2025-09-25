@@ -37,6 +37,7 @@
     <string name="route_type_status">STATUS</string>
     <string name="route_type_openapi">OPENAPI</string>
     <string name="route_type_docs">DOCS</string>
+    <string name="route_type_notification">NOTIFY</string>
 
     <!-- Route Management -->
     <string name="route_create_title">Create New Link</string>
@@ -180,6 +181,8 @@
     <string name="details_timeout">Timeout</string>
     <string name="details_builtin_route">Built-in Route</string>
     <string name="details_builtin_route_desc">This is a built-in Route that provides core server functionality.</string>
+    <string name="details_notification_config">Notification Configuration</string>
+    <string name="details_builtin_notification_desc">Built-in route for triggering device notifications via API calls.</string>
     <string name="details_yes">Yes</string>
     <string name="details_no">No</string>
 

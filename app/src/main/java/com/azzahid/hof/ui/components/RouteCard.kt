@@ -152,6 +152,13 @@ fun RouteCard(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
+
+                        is RouteType.NotificationRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_notification),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
 
                     Text(

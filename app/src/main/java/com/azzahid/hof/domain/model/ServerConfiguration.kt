@@ -9,6 +9,7 @@ data class ServerConfiguration(
     val enableSwagger: Boolean = true,
     val enableOpenApi: Boolean = true,
     val enableStatus: Boolean = true,
+    val enableNotification: Boolean = true,
     val customHeaders: Map<String, String> = emptyMap(),
     val logLevel: String = "INFO",
     val customConfigurer: (io.ktor.server.application.Application.() -> Unit)? = null

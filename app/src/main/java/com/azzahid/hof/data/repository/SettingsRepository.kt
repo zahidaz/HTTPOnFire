@@ -30,6 +30,7 @@ class SettingsRepository(private val context: Context) {
         private val ENABLE_SWAGGER_KEY = booleanPreferencesKey("enable_swagger")
         private val ENABLE_OPENAPI_KEY = booleanPreferencesKey("enable_openapi")
         private val ENABLE_STATUS_KEY = booleanPreferencesKey("enable_status")
+        private val ENABLE_NOTIFICATION_KEY = booleanPreferencesKey("enable_notification")
     }
 
     val autoStart: Flow<Boolean> = context.dataStore.data
@@ -95,6 +96,11 @@ class SettingsRepository(private val context: Context) {
     val enableStatus: Flow<Boolean> = context.dataStore.data
         .map { preferences ->
             preferences[ENABLE_STATUS_KEY] ?: true
+        }
+
+    val enableNotification: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[ENABLE_NOTIFICATION_KEY] ?: true
         }
 
     suspend fun updateAutoStart(enabled: Boolean) {
@@ -172,6 +178,12 @@ class SettingsRepository(private val context: Context) {
     suspend fun updateEnableStatus(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[ENABLE_STATUS_KEY] = enabled
+        }
+    }
+
+    suspend fun updateEnableNotification(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[ENABLE_NOTIFICATION_KEY] = enabled
         }
     }
 }

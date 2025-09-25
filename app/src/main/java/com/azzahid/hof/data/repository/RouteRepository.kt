@@ -110,6 +110,19 @@ class RouteRepository(private val routeDao: RouteDao) {
             )
         )
 
+        // TODO: when route is added here all other wiring should be automatic such as disabling and enabling
+        routes.add(
+            Route(
+                id = "built-in-notification",
+                path = "/api/notify",
+                method = HttpMethod.Post,
+                description = "Trigger device notifications",
+                type = RouteType.NotificationRoute,
+                isEnabled = config.enableNotification,
+                order = -997
+            )
+        )
+
         return routes
     }
 

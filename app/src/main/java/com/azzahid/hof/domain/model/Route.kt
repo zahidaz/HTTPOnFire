@@ -6,6 +6,7 @@ import com.azzahid.hof.features.http.routing.routes.addDirectory
 import com.azzahid.hof.features.http.routing.routes.addProxy
 import com.azzahid.hof.features.http.routing.routes.addRedirect
 import com.azzahid.hof.features.http.routing.routes.addStaticFile
+import com.azzahid.hof.features.http.routing.routes.builtin.addNotificationRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addOpenApiRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addStatusRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addSwaggerRoute
@@ -109,6 +110,13 @@ sealed class RouteType {
     object SwaggerRoute : BuiltInRoute() {
         override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
             serverRoute.addSwaggerRoute(route, this)
+        }
+    }
+
+    @Serializable
+    object NotificationRoute : BuiltInRoute() {
+        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
+            serverRoute.addNotificationRoute(route, this, config)
         }
     }
 

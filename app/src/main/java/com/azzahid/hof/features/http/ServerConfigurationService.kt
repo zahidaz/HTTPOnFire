@@ -44,6 +44,8 @@ class ServerConfigurationService(
             config.copy(enableOpenApi = enableOpenApi)
         }.combine(settingsRepository.enableStatus) { config, enableStatus ->
             config.copy(enableStatus = enableStatus)
+        }.combine(settingsRepository.enableNotification) { config, enableNotification ->
+            config.copy(enableNotification = enableNotification)
         }.combine(routeRepository.getEnabledRoutes()) { config, userRoutes ->
             val builtInRoutes = routeRepository.getAllBuiltInRoutes(config)
             config.copy(routes = userRoutes + builtInRoutes)

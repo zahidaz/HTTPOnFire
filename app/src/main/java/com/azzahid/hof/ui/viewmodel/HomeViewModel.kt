@@ -141,6 +141,10 @@ class HomeViewModel(
                     settingsRepository.updateEnableStatus(!route.isEnabled)
                 }
 
+                is RouteType.NotificationRoute -> {
+                    settingsRepository.updateEnableNotification(!route.isEnabled)
+                }
+
                 else -> {}
             }
         }
