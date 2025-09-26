@@ -5,48 +5,49 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.azzahid.hof.domain.state.ServerStatus
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoroutinesApi::class)
+
 class ServerServiceManager(private val context: Context) {
-    private var httpServerService: HttpServerService? = null
-    private var isBound = false
+    private val _service = MutableStateFlow<HttpServerService?>(null)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    private val _isConnected = MutableStateFlow(false)
-    val isConnected: Flow<Boolean> = _isConnected.asStateFlow()
-
-    val isServerRunning: Flow<Boolean> = _isConnected.flatMapLatest { isConnected ->
-        if (isConnected) {
-            httpServerService?.isRunning ?: flowOf(false)
-        } else {
-            flowOf(false)
-        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val serverStatus: Flow<ServerStatus> = _service.flatMapLatest { service ->
+        service?.serverStatus ?: flowOf(ServerStatus.STOPPED)
     }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             val binder = service as? HttpServerService.LocalBinder
-            httpServerService = binder?.getService()
-            isBound = true
-            _isConnected.value = true
+            _service.value = binder?.getService()
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
-            httpServerService = null
+            _service.value = null
             isBound = false
-            _isConnected.value = false
         }
     }
+
+    private var isBound = false
 
     fun bindToService() {
         if (!isBound) {
             val intent = Intent(context, HttpServerService::class.java)
-            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            val success = context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+            if (success) {
+                isBound = true
+            }
         }
     }
 
@@ -54,8 +55,6 @@ class ServerServiceManager(private val context: Context) {
         if (isBound) {
             context.unbindService(serviceConnection)
             isBound = false
-            _isConnected.value = false
-            httpServerService = null
         }
     }
 
@@ -73,7 +72,23 @@ class ServerServiceManager(private val context: Context) {
         context.startService(intent)
     }
 
-    fun restartServerWithNewConfiguration() {
-        httpServerService?.restartServerWithConfiguration()
+    fun toggleServer() {
+        if (_service.value?.serverStatus?.value == ServerStatus.STARTED) {
+            stopServer()
+        } else {
+            startServer()
+        }
+    }
+
+    fun restartServer() {
+        scope.launch {
+            val currentService = _service.value
+            if (currentService?.serverStatus?.value == ServerStatus.STARTED) {
+                stopServer()
+                serverStatus.first { it == ServerStatus.STOPPED }
+
+                startServer()
+            }
+        }
     }
 }

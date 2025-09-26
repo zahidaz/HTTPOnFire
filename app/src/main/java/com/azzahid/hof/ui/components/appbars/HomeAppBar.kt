@@ -28,16 +28,16 @@ import androidx.compose.ui.unit.dp
 import com.azzahid.hof.R
 import com.azzahid.hof.domain.state.ServerStatus
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAppBar(
     serverStatus: ServerStatus,
-    isServerRunning: Boolean,
     serverPort: Int,
     onToggleServer: () -> Unit,
     onShareClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
+
+    @OptIn(ExperimentalMaterial3Api::class)
     TopAppBar(
         title = {
             Row(
@@ -50,9 +50,10 @@ fun HomeAppBar(
                         .clip(CircleShape)
                         .background(
                             when (serverStatus) {
-                                ServerStatus.RUNNING -> Color(0xFF4CAF50)
-                                ServerStatus.ERROR -> Color.Red
-                                else -> MaterialTheme.colorScheme.primary
+                                ServerStatus.STARTED -> MaterialTheme.colorScheme.primary
+                                ServerStatus.ERROR -> MaterialTheme.colorScheme.error
+                                ServerStatus.STARTING, ServerStatus.STOPPING -> MaterialTheme.colorScheme.secondary
+                                else -> MaterialTheme.colorScheme.outline
                             }
                         )
                 )
@@ -60,13 +61,15 @@ fun HomeAppBar(
                 Column {
                     Text(
                         text = when (serverStatus) {
-                            ServerStatus.RUNNING -> stringResource(R.string.server_status_running)
+                            ServerStatus.STARTED -> stringResource(R.string.server_status_running)
+                            ServerStatus.STARTING -> stringResource(R.string.server_status_starting)
+                            ServerStatus.STOPPING -> stringResource(R.string.server_status_stopping)
                             ServerStatus.ERROR -> stringResource(R.string.server_status_error)
-                            else -> stringResource(R.string.server_status_stopped)
+                            ServerStatus.STOPPED -> stringResource(R.string.server_status_stopped)
                         },
                         style = MaterialTheme.typography.titleLarge
                     )
-                    if (isServerRunning) {
+                    if (serverStatus == ServerStatus.STARTED) {
                         Text(
                             text = stringResource(R.string.server_url_localhost, serverPort),
                             style = MaterialTheme.typography.bodySmall,
@@ -77,7 +80,7 @@ fun HomeAppBar(
             }
         },
         actions = {
-            if (isServerRunning) {
+            if (serverStatus == ServerStatus.STARTED) {
                 IconButton(onClick = onShareClick) {
                     Icon(
                         imageVector = Icons.Default.Share,
@@ -86,15 +89,24 @@ fun HomeAppBar(
                 }
             }
 
-            IconButton(onClick = onToggleServer) {
+            IconButton(
+                onClick = onToggleServer,
+                enabled = serverStatus !in listOf(ServerStatus.STARTING, ServerStatus.STOPPING)
+            ) {
+                val icon = when (serverStatus) {
+                    ServerStatus.STARTED -> Icons.Default.Stop
+                    ServerStatus.STARTING, ServerStatus.STOPPING -> Icons.Default.Stop
+                    else -> Icons.Default.PlayArrow
+                }
+                val actionText = if (serverStatus == ServerStatus.STARTED) {
+                    stringResource(R.string.server_stop)
+                } else {
+                    stringResource(R.string.server_start)
+                }
+
                 Icon(
-                    imageVector = if (isServerRunning) Icons.Default.Stop else Icons.Default.PlayArrow,
-                    contentDescription = stringResource(
-                        R.string.cd_start_stop_server,
-                        if (isServerRunning) stringResource(R.string.server_stop) else stringResource(
-                            R.string.server_start
-                        )
-                    )
+                    imageVector = icon,
+                    contentDescription = stringResource(R.string.cd_start_stop_server, actionText)
                 )
             }
 

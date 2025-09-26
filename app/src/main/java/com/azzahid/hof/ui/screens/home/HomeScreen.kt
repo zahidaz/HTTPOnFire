@@ -37,10 +37,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.azzahid.hof.Constants
 import com.azzahid.hof.R
 import com.azzahid.hof.domain.model.Route
 import com.azzahid.hof.domain.model.RouteType
 import com.azzahid.hof.domain.state.HomeUiState
+import com.azzahid.hof.domain.state.ServerStatus
 import com.azzahid.hof.ui.components.PermissionRationaleDialog
 import com.azzahid.hof.ui.components.RouteCard
 import com.azzahid.hof.ui.components.RouteDetailsDialog
@@ -68,23 +70,23 @@ fun TabHomeScreen(
     var selectedRouteForDetails by remember { mutableStateOf<Route?>(null) }
     var selectedRouteForShare by remember { mutableStateOf<Route?>(null) }
 
-    val serverUrlPairs = remember(homeUiState.networkAddresses) {
-        if (homeUiState.isServerRunning) homeUiState.networkAddresses else emptyList()
+    val serverUrlPairs = remember(homeUiState.networkAddresses, homeUiState.serverStatus) {
+        if (homeUiState.serverStatus == ServerStatus.STARTED) homeUiState.networkAddresses else emptyList()
     }
     var selectedServerQrUrl by remember(serverUrlPairs) {
         mutableStateOf(serverUrlPairs.firstOrNull()?.first)
     }
 
-    val routeUrlPairs = remember(homeUiState.networkAddresses, selectedRouteForShare?.path) {
-        selectedRouteForShare?.let { route ->
-            if (homeUiState.isServerRunning) {
-                homeUiState.networkAddresses.map { (url, interfaceName) ->
-                    val cleanPath =
-                        if (route.path.startsWith("/")) route.path else "/${route.path}"
-                    "$url$cleanPath" to interfaceName
-                }
-            } else emptyList()
-        } ?: emptyList()
+    val routeUrlPairs = remember(homeUiState.networkAddresses, homeUiState.serverStatus, selectedRouteForShare?.path) {
+        val route = selectedRouteForShare
+        if (homeUiState.serverStatus != ServerStatus.STARTED || route == null) {
+            emptyList()
+        } else {
+            val cleanPath = if (route.path.startsWith("/")) route.path else "/${route.path}"
+            homeUiState.networkAddresses.map { (url, interfaceName) ->
+                "$url$cleanPath" to interfaceName
+            }
+        }
     }
     var selectedRouteQrUrl by remember(routeUrlPairs) {
         mutableStateOf(routeUrlPairs.firstOrNull()?.first)
@@ -94,7 +96,7 @@ fun TabHomeScreen(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         settingsViewModel.onPermissionResult(isGranted)
-        if (isGranted && homeUiState.isServerRunning) {
+        if (isGranted && homeUiState.serverStatus == ServerStatus.STARTED) {
             homeViewModel.restartServerWithNewConfiguration()
         }
     }
@@ -102,8 +104,7 @@ fun TabHomeScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         HomeAppBar(
             serverStatus = homeUiState.serverStatus,
-            isServerRunning = homeUiState.isServerRunning,
-            serverPort = homeUiState.serverPort.toIntOrNull() ?: 8080,
+            serverPort = homeUiState.serverPort.toIntOrNull() ?: Constants.DEFAULT_PORT,
             onToggleServer = homeViewModel::toggleServer,
             onShareClick = { showShareDialog = true },
             onSettingsClick = { showSettingsSheet = true }
@@ -132,10 +133,7 @@ fun TabHomeScreen(
             )
         },
         onUpdateEnableLogs = settingsViewModel::updateEnableLogs,
-        onUpdateDefaultPort = { port ->
-            settingsViewModel.updateDefaultPort(port)
-            homeViewModel.updateServerPort(port)
-        },
+        onUpdateDefaultPort = homeViewModel::updateServerPort,
         onUpdateLogRetentionDays = settingsViewModel::updateLogRetentionDays,
         onUpdateMaxLogEntries = settingsViewModel::updateMaxLogEntries,
         onUpdateAutoCleanupEnabled = settingsViewModel::updateAutoCleanupEnabled,

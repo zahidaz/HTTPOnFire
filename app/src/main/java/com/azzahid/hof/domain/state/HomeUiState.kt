@@ -8,7 +8,6 @@ data class HomeUiState(
     val serverStatus: ServerStatus = ServerStatus.STOPPED,
     val serverPort: String = Constants.DEFAULT_PORT_STRING,
     val serverUrl: String? = null,
-    val isServerRunning: Boolean = false,
     val connectionCount: Int = 0,
     val routes: List<Route> = emptyList(),
     val isLoading: Boolean = false,
@@ -18,11 +17,10 @@ data class HomeUiState(
     val networkAddresses: List<Pair<String, String>> = emptyList()
 )
 
-
 enum class ServerStatus {
     STOPPED,
     STARTING,
-    RUNNING,
+    STARTED,
     STOPPING,
     ERROR
 }

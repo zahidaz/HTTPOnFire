@@ -1,6 +1,7 @@
 package com.azzahid.hof.ui.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.azzahid.hof.data.repository.NetworkRepository
@@ -36,8 +37,8 @@ class HomeViewModel(
         serverServiceManager.bindToService()
         loadSettingsAndSetupAutoStart()
         viewModelScope.launch {
-            serverServiceManager.isServerRunning.collect { isRunning ->
-                updateServerState(isRunning)
+            serverServiceManager.serverStatus.collect { status ->
+                updateServerState(status)
             }
         }
     }
@@ -50,7 +51,7 @@ class HomeViewModel(
             ) { port, autoStart ->
                 _uiState.value = _uiState.value.copy(serverPort = port)
 
-                if (autoStart && !_uiState.value.isServerRunning) {
+                if (autoStart && _uiState.value.serverStatus == ServerStatus.STOPPED) {
                     startServer()
                 }
             }.collect { }
@@ -66,7 +67,7 @@ class HomeViewModel(
                 if (hasRoutesChanged(
                         previousRoutes,
                         allRoutes
-                    ) && _uiState.value.isServerRunning
+                    ) && _uiState.value.serverStatus == ServerStatus.STARTED
                 ) {
                     restartServerWithNewConfiguration()
                 }
@@ -74,22 +75,31 @@ class HomeViewModel(
         }
     }
 
-    private fun updateServerState(isRunning: Boolean) {
-        val serverUrl = if (isRunning) {
-            try {
-                "http://${networkRepository.getLocalIpAddress()}:${_uiState.value.serverPort}"
+    private fun updateServerState(status: ServerStatus) {
+        val currentState = _uiState.value
+        val wasStarted = currentState.serverStatus == ServerStatus.STARTED
+        val isStarted = status == ServerStatus.STARTED
+
+        val serverUrl = when {
+            isStarted -> try {
+                "http://${networkRepository.getLocalIpAddress()}:${currentState.serverPort}"
             } catch (_: Exception) {
-                "http://localhost:${_uiState.value.serverPort}"
+                "http://localhost:${currentState.serverPort}"
             }
-        } else null
+            !isStarted -> null
+            else -> currentState.serverUrl
+        }
 
-        val networkAddresses = if (isRunning) {
-            networkRepository.getNetworkAddresses(_uiState.value.serverPort)
-        } else emptyList()
+        val networkAddresses = if (isStarted && !wasStarted) {
+            networkRepository.getNetworkAddresses(currentState.serverPort)
+        } else if (!isStarted) {
+            emptyList()
+        } else {
+            currentState.networkAddresses
+        }
 
-        _uiState.value = _uiState.value.copy(
-            serverStatus = if (isRunning) ServerStatus.RUNNING else ServerStatus.STOPPED,
-            isServerRunning = isRunning,
+        _uiState.value = currentState.copy(
+            serverStatus = status,
             serverUrl = serverUrl,
             networkAddresses = networkAddresses
         )
@@ -108,32 +118,20 @@ class HomeViewModel(
     }
 
 
-    fun startServer() {
-        _uiState.value = _uiState.value.copy(
-            serverStatus = ServerStatus.STARTING,
-            error = null
-        )
+    private fun startServer() {
         serverServiceManager.startServer()
     }
 
-    fun stopServer() {
-        _uiState.value = _uiState.value.copy(
-            serverStatus = ServerStatus.STOPPING,
-            error = null
-        )
+    private fun stopServer() {
         serverServiceManager.stopServer()
     }
 
     fun toggleServer() {
-        if (_uiState.value.isServerRunning) {
-            stopServer()
-        } else {
-            startServer()
-        }
+        serverServiceManager.toggleServer()
     }
 
     fun restartServerWithNewConfiguration() {
-        serverServiceManager.restartServerWithNewConfiguration()
+        serverServiceManager.restartServer()
     }
 
     override fun onCleared() {
@@ -143,11 +141,10 @@ class HomeViewModel(
 
     fun updateServerPort(port: String) {
         viewModelScope.launch {
-            val wasRunning = _uiState.value.isServerRunning
-
             _uiState.value = _uiState.value.copy(serverPort = port)
+            settingsRepository.updateDefaultPort(port)
 
-            if (wasRunning) {
+            if (_uiState.value.serverStatus == ServerStatus.STARTED) {
                 restartServerWithNewConfiguration()
             }
         }
@@ -158,13 +155,21 @@ class HomeViewModel(
     }
 
     fun generateServerQr(url: String) {
-        val qrBitmap = qrCodeService.generateQrCode(url)
-        _uiState.value = _uiState.value.copy(serverQrBitmap = qrBitmap)
+        try {
+            val qrBitmap = qrCodeService.generateQrCode(url)
+            _uiState.value = _uiState.value.copy(serverQrBitmap = qrBitmap)
+        } catch (e: Exception) {
+            Log.e("HomeViewModel", "Failed to generate server QR code", e)
+        }
     }
 
     fun generateRouteQr(url: String) {
-        val qrBitmap = qrCodeService.generateQrCode(url)
-        _uiState.value = _uiState.value.copy(routeQrBitmap = qrBitmap)
+        try {
+            val qrBitmap = qrCodeService.generateQrCode(url)
+            _uiState.value = _uiState.value.copy(routeQrBitmap = qrBitmap)
+        } catch (e: Exception) {
+            Log.e("HomeViewModel", "Failed to generate route QR code", e)
+        }
     }
 
     private fun hasRoutesChanged(previous: List<Route>, current: List<Route>): Boolean {
