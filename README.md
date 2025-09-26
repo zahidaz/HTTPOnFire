@@ -32,9 +32,9 @@ full-featured web server.
 - [x] **CORS configuration**
 - [x] **Route persistence with Room database**
 - [x] **Request monitoring and logs**
+- [x] **Device notification API endpoint**
 - [ ] File upload handling
 - [ ] Device trigger endpoints (flashlight, vibration, volume control)
-- [ ] Notification generator routes for system notifications
 - [ ] SQLite database, query builder and query routes
 - [ ] App management endpoints (install, uninstall, launch apps)
 - [ ] Device sensors data exposure (accelerometer, gyroscope, GPS)
