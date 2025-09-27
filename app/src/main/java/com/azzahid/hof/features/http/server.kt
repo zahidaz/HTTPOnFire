@@ -1,6 +1,7 @@
 package com.azzahid.hof.features.http
 
 import android.content.Context
+import android.os.Build
 import com.azzahid.hof.domain.model.CIOEmbeddedServer
 import com.azzahid.hof.domain.model.ServerConfiguration
 import com.azzahid.hof.features.http.configuration.configureContentNegotiation
@@ -24,7 +25,9 @@ internal fun Application.configureServerWithSettings(
     configureContentNegotiation()
     configureStatusPages()
 
-    install(OpenApi)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        install(OpenApi)
+    }
 
     if (config.enableLogs) {
         configureLogging(config)

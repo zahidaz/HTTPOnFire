@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import com.azzahid.hof.MainActivity
 import com.azzahid.hof.R
+import androidx.core.graphics.scale
 
 class HttpServerNotificationManager(
     private val service: Service,
@@ -45,14 +46,27 @@ class HttpServerNotificationManager(
     }
 
     private fun getLargeIconBitmap(): Bitmap? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return null
+        }
+
         return try {
             val drawable = ContextCompat.getDrawable(service, R.drawable.ic_launcher_foreground)
             when (drawable) {
-                is BitmapDrawable -> drawable.bitmap
+                is BitmapDrawable -> {
+                    val originalBitmap = drawable.bitmap
+                    if (originalBitmap.width > 256 || originalBitmap.height > 256) {
+                        originalBitmap.scale(256, 256)
+                    } else {
+                        originalBitmap
+                    }
+                }
                 else -> {
                     drawable?.let {
-                        val bitmap = createBitmap(it.intrinsicWidth.takeIf { w -> w > 0 } ?: 64,
-                            it.intrinsicHeight.takeIf { h -> h > 0 } ?: 64)
+                        val maxSize = 128
+                        val width = minOf(it.intrinsicWidth.takeIf { w -> w > 0 } ?: maxSize, maxSize)
+                        val height = minOf(it.intrinsicHeight.takeIf { h -> h > 0 } ?: maxSize, maxSize)
+                        val bitmap = createBitmap(width, height)
                         val canvas = Canvas(bitmap)
                         it.setBounds(0, 0, canvas.width, canvas.height)
                         it.draw(canvas)

@@ -28,7 +28,7 @@ full-featured web server.
 - [x] **Static file serving**
 - [x] **Directory browsing and static website hosting**
 - [x] **Custom HTTP endpoints (GET, POST, PUT, DELETE, PATCH)**
-- [x] **OpenAPI documentation with Swagger UI**
+- [x] **OpenAPI documentation with Swagger UI** *(Android 12+ required)*
 - [x] **CORS configuration**
 - [x] **Route persistence with Room database**
 - [x] **Request monitoring and logs**
