@@ -6,10 +6,7 @@ import io.github.smiley4.ktoropenapi.route
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.response.respond
 
-internal fun io.ktor.server.routing.Route.addProxy(
-    route: Route,
-    type: RouteType.ProxyRoute
-) {
+internal fun io.ktor.server.routing.Route.addProxy(route: Route) {
     route(route.path, {
         description = route.description
     }) {

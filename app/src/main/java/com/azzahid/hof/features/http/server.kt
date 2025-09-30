@@ -3,7 +3,8 @@ package com.azzahid.hof.features.http
 import android.content.Context
 import android.os.Build
 import com.azzahid.hof.domain.model.CIOEmbeddedServer
-import com.azzahid.hof.domain.model.ServerConfiguration
+import com.azzahid.hof.domain.model.CorsConfiguration
+import com.azzahid.hof.domain.model.Route
 import com.azzahid.hof.features.http.configuration.configureContentNegotiation
 import com.azzahid.hof.features.http.configuration.configureCors
 import com.azzahid.hof.features.http.configuration.configureLogging
@@ -15,25 +16,22 @@ import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.routing.routing
 import io.ktor.util.AttributeKey
+import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.coroutineContext
 
-
-internal fun Application.configureServerWithSettings(
-    config: ServerConfiguration,
+internal suspend fun buildServerWithConfiguration(
+    androidContext: Context,
+    port: Int,
+    corsConfig: CorsConfiguration,
+    enableLogs: Boolean,
+    logLevel: String,
+    routes: List<Route>,
     httpRequestLogger: HttpRequestLogger? = null
-) {
-    configureCors(config.corsConfiguration)
-    configureContentNegotiation()
-    configureStatusPages()
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        install(OpenApi)
-    }
-
-    if (config.enableLogs) {
-        configureLogging(config)
-        httpRequestLogger?.let { logger ->
-            install(logger.plugin)
-        }
+): CIOEmbeddedServer {
+    return CoroutineScope(coroutineContext).embeddedServer(CIO, port = port, parentCoroutineContext = coroutineContext) {
+        setAndroidContext(androidContext)
+        configureServerWithSettings(corsConfig, enableLogs, logLevel, httpRequestLogger)
+        configureRoutingWithRoutes(routes)
     }
 }
 
@@ -46,23 +44,33 @@ private fun Application.setAndroidContext(context: Context) {
 val Application.androidContext: Context
     get() = attributes[AndroidContextKey]
 
-internal fun buildServerWithConfiguration(
-    androidContext: Context,
-    config: ServerConfiguration,
+
+internal fun Application.configureServerWithSettings(
+    corsConfig: CorsConfiguration,
+    enableLogs: Boolean,
+    logLevel: String,
     httpRequestLogger: HttpRequestLogger? = null
-): CIOEmbeddedServer {
-    return embeddedServer(CIO, port = config.port) {
-        setAndroidContext(androidContext)
-        configureServerWithSettings(config, httpRequestLogger)
-        configureRoutingWithRoutes(config)
-        config.customConfigurer?.invoke(this)
+) {
+    configureCors(corsConfig)
+    configureContentNegotiation()
+    configureStatusPages()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        install(OpenApi)
+    }
+
+    if (enableLogs) {
+        configureLogging(logLevel)
+        httpRequestLogger?.let { logger ->
+            install(logger.plugin)
+        }
     }
 }
 
-internal fun Application.configureRoutingWithRoutes(config: ServerConfiguration) {
+internal fun Application.configureRoutingWithRoutes(routes: List<Route>) {
     routing {
-        config.routes.filter { it.isEnabled }.forEach { route ->
-            route.type.install(this, route, config)
+        routes.filter { it.isEnabled }.forEach { route ->
+            route.type.handler(route).invoke(this)
         }
     }
 }

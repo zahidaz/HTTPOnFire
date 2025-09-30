@@ -1,9 +1,8 @@
 package com.azzahid.hof.features.http.routing.routes
 
-import androidx.core.net.toUri
+import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import com.azzahid.hof.domain.model.Route
-import com.azzahid.hof.domain.model.RouteType
 import com.azzahid.hof.features.http.androidContext
 import com.azzahid.hof.features.http.utils.DirectoryListingGenerator
 import com.azzahid.hof.features.http.utils.FileServingUtils
@@ -19,7 +18,9 @@ import io.ktor.server.response.respondText
 
 internal fun io.ktor.server.routing.Route.addDirectory(
     route: Route,
-    type: RouteType.Directory
+    baseUri: Uri,
+    allowBrowsing: Boolean,
+    indexFile: String?
 ) {
     route(route.path, {
         description = route.description
@@ -29,7 +30,6 @@ internal fun io.ktor.server.routing.Route.addDirectory(
             val relativePath = call.parameters.getAll("path")?.joinToString("/") ?: ""
 
             try {
-                val baseUri = type.directoryUri.toUri()
                 val baseDocumentFile = DocumentFile.fromTreeUri(context, baseUri)
 
                 if (baseDocumentFile == null || !baseDocumentFile.exists()) {
@@ -56,15 +56,15 @@ internal fun io.ktor.server.routing.Route.addDirectory(
                     }
 
                     targetFile.isDirectory -> {
-                        if (type.indexFile != null) {
-                            val indexFile = targetFile.findFile(type.indexFile)
+                        if (indexFile != null) {
+                            val indexFile = targetFile.findFile(indexFile)
                             if (indexFile != null && indexFile.exists() && indexFile.isFile) {
                                 FileServingUtils.serveDocumentFile(call, indexFile, context)
                                 return@get
                             }
                         }
 
-                        if (type.allowBrowsing) {
+                        if (allowBrowsing) {
                             val listing = DirectoryListingGenerator.generateFromDocumentFile(
                                 targetFile,
                                 route.path,

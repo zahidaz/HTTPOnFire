@@ -6,9 +6,7 @@ data class ServerConfiguration(
     val autoStart: Boolean,
     val routes: List<Route>,
     val corsConfiguration: CorsConfiguration = CorsConfiguration(),
-    val customHeaders: Map<String, String> = emptyMap(),
     val logLevel: String = "INFO",
-    val customConfigurer: (io.ktor.server.application.Application.() -> Unit)? = null
 )
 
 data class CorsConfiguration(

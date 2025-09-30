@@ -17,7 +17,7 @@ class ServerConfigurationService(
     private val httpRequestLogRepository: HttpRequestLogRepository? = null
 ) {
 
-    fun getServerConfiguration(): Flow<ServerConfiguration> {
+    private fun getServerConfiguration(): Flow<ServerConfiguration> {
         return combine(
             settingsRepository.defaultPort,
             settingsRepository.enableLogs,
@@ -85,7 +85,15 @@ class ServerConfigurationService(
     suspend fun buildConfiguredServer(androidContext: android.content.Context): CIOEmbeddedServer {
         val config = getServerConfigurationSnapshot()
         val httpRequestLogger = httpRequestLogRepository?.let { HttpRequestLogger(it) }
-        return buildServerWithConfiguration(androidContext, config, httpRequestLogger)
+        return buildServerWithConfiguration(
+            androidContext = androidContext,
+            port = config.port,
+            corsConfig = config.corsConfiguration,
+            enableLogs = config.enableLogs,
+            logLevel = config.logLevel,
+            routes = config.routes,
+            httpRequestLogger = httpRequestLogger
+        )
     }
 }
 

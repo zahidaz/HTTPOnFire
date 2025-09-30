@@ -7,15 +7,16 @@ import io.ktor.server.response.respondRedirect
 
 internal fun io.ktor.server.routing.Route.addRedirect(
     route: Route,
-    type: RouteType.RedirectRoute
+    isPermanentRedirect: Boolean,
+    url: String
 ) {
     route(route.path, io.ktor.http.HttpMethod.Get, {
         description = route.description
     }) {
         handle {
             call.respondRedirect(
-                type.targetUrl,
-                permanent = type.isPermanentRedirect()
+                url = url,
+                permanent = isPermanentRedirect
             )
         }
     }

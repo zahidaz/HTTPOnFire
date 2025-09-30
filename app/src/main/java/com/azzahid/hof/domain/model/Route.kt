@@ -1,5 +1,6 @@
 package com.azzahid.hof.domain.model
 
+import androidx.core.net.toUri
 import com.azzahid.hof.domain.model.serialization.HttpMethodSerializer
 import com.azzahid.hof.features.http.routing.routes.addApi
 import com.azzahid.hof.features.http.routing.routes.addDirectory
@@ -30,7 +31,7 @@ data class Route(
 
 @Serializable
 sealed class RouteType {
-    abstract fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration)
+    abstract fun handler(route: Route): ServerRoute.() -> Unit
 
     @Serializable
     sealed class BuiltInRoute : RouteType()
@@ -42,9 +43,8 @@ sealed class RouteType {
         val headers: Map<String, String> = emptyMap()
     ) : RouteType() {
         fun getKtorStatusCode(): HttpStatusCode = HttpStatusCode.fromValue(statusCode)
-
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addApi(route, this, config)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addApi(route, headers, responseBody, getKtorStatusCode())
         }
     }
 
@@ -53,8 +53,8 @@ sealed class RouteType {
         val fileUri: String,
         val mimeType: String? = null
     ) : RouteType() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addStaticFile(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addStaticFile(route, fileUri.toUri())
         }
     }
 
@@ -64,8 +64,8 @@ sealed class RouteType {
         val allowBrowsing: Boolean = true,
         val indexFile: String? = "index.html"
     ) : RouteType() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addDirectory(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addDirectory(route, directoryUri.toUri(), allowBrowsing, indexFile)
         }
     }
 
@@ -76,8 +76,8 @@ sealed class RouteType {
     ) : RouteType() {
         fun isPermanentRedirect(): Boolean = statusCode == HttpStatusCode.MovedPermanently.value
 
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addRedirect(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addRedirect(route, isPermanentRedirect(), targetUrl)
         }
     }
 
@@ -87,36 +87,36 @@ sealed class RouteType {
         val preserveHostHeader: Boolean = false,
         val timeout: Long = 30000
     ) : RouteType() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addProxy(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addProxy(route)
         }
     }
 
     @Serializable
     object StatusRoute : BuiltInRoute() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addStatusRoute(route, this, config)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addStatusRoute(route)
         }
     }
 
     @Serializable
     object OpenApiRoute : BuiltInRoute() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addOpenApiRoute(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addOpenApiRoute(route)
         }
     }
 
     @Serializable
     object SwaggerRoute : BuiltInRoute() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addSwaggerRoute(route, this)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addSwaggerRoute(route)
         }
     }
 
     @Serializable
     object NotificationRoute : BuiltInRoute() {
-        override fun install(serverRoute: ServerRoute, route: Route, config: ServerConfiguration) {
-            serverRoute.addNotificationRoute(route, this, config)
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addNotificationRoute(route)
         }
     }
 

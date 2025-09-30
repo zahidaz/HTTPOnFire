@@ -13,10 +13,19 @@ import com.azzahid.hof.data.repository.SettingsRepository
 import com.azzahid.hof.domain.model.CIOEmbeddedServer
 import com.azzahid.hof.domain.state.ServerStatus
 import com.azzahid.hof.features.http.ServerConfigurationService
-import io.ktor.server.application.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.reflect.KClass
+import io.ktor.server.application.ApplicationStarted
+import io.ktor.server.application.ApplicationStopPreparing
+import io.ktor.server.application.ApplicationStopped
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class HttpServerService : Service() {
 
@@ -29,7 +38,10 @@ class HttpServerService : Service() {
     }
 
     private val binder = LocalBinder()
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val handler = CoroutineExceptionHandler { _, exception ->
+        println("Caught exception: ${exception.message}")
+    }
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + handler)
 
     private lateinit var serverConfig: ServerConfigurationService
     private lateinit var notificationMgr: HttpServerNotificationManager
@@ -90,13 +102,14 @@ class HttpServerService : Service() {
             return
         }
 
+        _serverStatus.value = ServerStatus.STARTING
+        val newServer = serverConfig.buildConfiguredServer(this@HttpServerService).apply {
+            setupServerMonitoring()
+        }
+        server = newServer
+
         try {
-            _serverStatus.value = ServerStatus.STARTING
-            val newServer = serverConfig.buildConfiguredServer(this@HttpServerService).apply {
-                setupServerMonitoring()
-            }
-            server = newServer
-            newServer.startSuspend(wait = true)
+            newServer.start(wait = true)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start server", e)
             _serverStatus.value = ServerStatus.ERROR

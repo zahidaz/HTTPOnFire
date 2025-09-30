@@ -1,5 +1,6 @@
 package com.azzahid.hof.features.http.routing.routes
 
+import android.net.Uri
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.azzahid.hof.domain.model.Route
@@ -12,7 +13,7 @@ import io.ktor.server.response.respond
 
 internal fun io.ktor.server.routing.Route.addStaticFile(
     route: Route,
-    type: RouteType.StaticFile
+    uri: Uri
 ) {
     get(route.path, {
         description = route.description
@@ -20,7 +21,6 @@ internal fun io.ktor.server.routing.Route.addStaticFile(
         val context = call.application.androidContext
 
         try {
-            val uri = type.fileUri.toUri()
             val documentFile = DocumentFile.fromSingleUri(context, uri)
 
             if (documentFile != null && documentFile.exists() && documentFile.isFile) {
@@ -28,7 +28,7 @@ internal fun io.ktor.server.routing.Route.addStaticFile(
             } else {
                 call.respond(
                     HttpStatusCode.NotFound,
-                    "File not found or URI invalid: ${type.fileUri}"
+                    "File not found or URI invalid: $uri"
                 )
             }
         } catch (e: Exception) {

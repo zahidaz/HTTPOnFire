@@ -7,8 +7,6 @@ import androidx.core.content.ContextCompat
 import com.azzahid.hof.domain.model.Failure
 import com.azzahid.hof.domain.model.NotificationRequest
 import com.azzahid.hof.domain.model.Route
-import com.azzahid.hof.domain.model.RouteType
-import com.azzahid.hof.domain.model.ServerConfiguration
 import com.azzahid.hof.domain.model.Success
 import com.azzahid.hof.features.http.androidContext
 import com.azzahid.hof.services.DeviceNotificationService
@@ -17,11 +15,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 
-internal fun io.ktor.server.routing.Route.addNotificationRoute(
-    route: Route,
-    type: RouteType.NotificationRoute,
-    config: ServerConfiguration
-) {
+internal fun io.ktor.server.routing.Route.addNotificationRoute(route: Route) {
     post(route.path, {
         description = "Trigger a device notification with custom title and message"
         request {
@@ -104,9 +98,6 @@ internal fun io.ktor.server.routing.Route.addNotificationRoute(
             }
         }
     }) {
-        config.customHeaders.forEach { (key, value) ->
-            call.response.headers.append(key, value)
-        }
 
         val context = call.application.androidContext
 
