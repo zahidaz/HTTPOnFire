@@ -92,15 +92,11 @@ class HttpServerService : Service() {
 
         try {
             _serverStatus.value = ServerStatus.STARTING
-
-            val config = serverConfig.getServerConfiguration().first()
             val newServer = serverConfig.buildConfiguredServer(this@HttpServerService).apply {
-                setupServerMonitoring(config.port)
+                setupServerMonitoring()
             }
-
             server = newServer
             newServer.startSuspend(wait = true)
-
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start server", e)
             _serverStatus.value = ServerStatus.ERROR
@@ -109,11 +105,11 @@ class HttpServerService : Service() {
         }
     }
 
-    private fun CIOEmbeddedServer.setupServerMonitoring(port: Int) {
+    private fun CIOEmbeddedServer.setupServerMonitoring() {
         monitor.subscribe(ApplicationStarted) {
             _serverStatus.value = ServerStatus.STARTED
             val ipAddress = networkRepo.getLocalIpAddress()
-            val msg = "Server started on http://$ipAddress:$port"
+            val msg = "Server started on http://$ipAddress:port"
             notificationMgr.showNotification(msg, true)
             Log.i(TAG, msg)
         }
