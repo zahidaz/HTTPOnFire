@@ -26,8 +26,8 @@ android {
         applicationId = "com.azzahid.hof"
         minSdk = 24
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.0.3+${versionCode}"
+        versionCode = 4
+        versionName = "0.0.4+${versionCode}"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
