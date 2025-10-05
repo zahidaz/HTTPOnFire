@@ -106,10 +106,6 @@ fun RouteDetailsDialog(
                         RedirectConfigSection(type = type)
                     }
 
-                    is RouteType.ProxyRoute -> {
-                        ProxyConfigSection(type = type)
-                    }
-
                     else -> {
                         BuiltInRouteConfigSection()
                     }
@@ -356,34 +352,6 @@ private fun RedirectConfigSection(type: RouteType.RedirectRoute) {
                     )
                 })"
             )
-        }
-    }
-}
-
-@Composable
-private fun ProxyConfigSection(type: RouteType.ProxyRoute) {
-    Card(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.details_proxy_config),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            DetailRow(label = stringResource(R.string.details_target_url), value = type.targetUrl)
-            DetailRow(
-                label = stringResource(R.string.details_preserve_host),
-                value = if (type.preserveHostHeader) stringResource(R.string.details_yes) else stringResource(
-                    R.string.details_no
-                )
-            )
-            DetailRow(label = stringResource(R.string.details_timeout), value = "${type.timeout}ms")
         }
     }
 }

@@ -125,13 +125,6 @@ fun RouteCard(
                             }
                         }
 
-                        is RouteType.ProxyRoute -> {
-                            TypeChip(
-                                text = stringResource(R.string.route_type_proxy),
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-
                         is RouteType.StatusRoute -> {
                             TypeChip(
                                 text = stringResource(R.string.route_type_status),
@@ -156,6 +149,13 @@ fun RouteCard(
                         is RouteType.NotificationRoute -> {
                             TypeChip(
                                 text = stringResource(R.string.route_type_notification),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.ProxyRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_proxy),
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }

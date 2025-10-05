@@ -4,11 +4,11 @@ import androidx.core.net.toUri
 import com.azzahid.hof.domain.model.serialization.HttpMethodSerializer
 import com.azzahid.hof.features.http.routing.routes.addApi
 import com.azzahid.hof.features.http.routing.routes.addDirectory
-import com.azzahid.hof.features.http.routing.routes.addProxy
 import com.azzahid.hof.features.http.routing.routes.addRedirect
 import com.azzahid.hof.features.http.routing.routes.addStaticFile
 import com.azzahid.hof.features.http.routing.routes.builtin.addNotificationRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addOpenApiRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addProxyRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addStatusRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addSwaggerRoute
 import io.ktor.http.HttpMethod
@@ -82,17 +82,6 @@ sealed class RouteType {
     }
 
     @Serializable
-    data class ProxyRoute(
-        val targetUrl: String,
-        val preserveHostHeader: Boolean = false,
-        val timeout: Long = 30000
-    ) : RouteType() {
-        override fun handler(route: Route): ServerRoute.() -> Unit = {
-            addProxy(route)
-        }
-    }
-
-    @Serializable
     object StatusRoute : BuiltInRoute() {
         override fun handler(route: Route): ServerRoute.() -> Unit = {
             addStatusRoute(route)
@@ -117,6 +106,13 @@ sealed class RouteType {
     object NotificationRoute : BuiltInRoute() {
         override fun handler(route: Route): ServerRoute.() -> Unit = {
             addNotificationRoute(route)
+        }
+    }
+
+    @Serializable
+    object ProxyRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addProxyRoute(route)
         }
     }
 

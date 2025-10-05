@@ -42,6 +42,15 @@ object BuiltInRouteRegistry {
             type = RouteType.NotificationRoute,
             isEnabled = true,
             order = -997
+        ),
+        Route(
+            id = "built-in-proxy",
+            path = "/api/proxy",
+            method = HttpMethod.Get,
+            description = "Forward requests to external URLs",
+            type = RouteType.ProxyRoute,
+            isEnabled = true,
+            order = -996
         )
     )
 
