@@ -60,6 +60,7 @@ The APK will be generated in `app/build/outputs/apk/debug/`
 - [x] **Route persistence with Room database** - Keep all your custom pages saved between app restarts
 - [x] **Request monitoring and logs** - See who visits your server with detailed activity logs
 - [x] **Device notification API endpoint** - Receive notifications on your phone from other devices via web requests
+- [x] **HTTP proxy endpoint** - Your phone acts as a proxy server that fetches any URL and returns the content to the client *(WebView rendering coming in Phase 2)*
 
 ### Planned Features
 
@@ -70,7 +71,7 @@ The APK will be generated in `app/build/outputs/apk/debug/`
 - [ ] **Device sensors data exposure (accelerometer, gyroscope, GPS)** - Expose your phone's sensor data through web endpoints
 - [ ] **Device information API endpoints (battery, storage, network)** - Share your phone's system information via web requests
 - [ ] **Authentication system with pre-shipped themed login pages** - Protect your server with ready-made login screens
-- [ ] **HTTP proxy endpoint** - Your phone acts as a proxy server that fetches any URL and returns the content to the client, with option to render it first through WebView to bypass anti-bot measures
+- [ ] **HTTP proxy WebView rendering (Phase 2)** - Option to render pages through WebView before returning content to bypass anti-bot measures and execute JavaScript
 - [ ] **Redirect routes** - Create custom URLs that redirect visitors to other websites
 - [ ] **Third-party content provider integration (Contacts, SMS, Calendar, Photos)** - Expose your phone's personal data through web endpoints
 - [ ] **Device AI model exposure** - Run and access AI models on your phone via web requests
@@ -113,6 +114,23 @@ curl http://192.168.1.100:43567/api/json
 
 # Browse API docs in browser
 # Visit: http://192.168.1.100:43567/api/swagger
+
+# Proxy external URLs through your phone
+curl http://192.168.1.100:43567/api/proxy/https://api.github.com/users/github
+
+# Proxy with custom headers
+curl http://192.168.1.100:43567/api/proxy/https://httpbin.org/headers \
+  -H "Authorization: Bearer your-token" \
+  -H "X-Custom-Header: value"
+
+# Proxy POST requests
+curl -X POST http://192.168.1.100:43567/api/proxy/https://jsonplaceholder.typicode.com/posts \
+  -H "Content-Type: application/json" \
+  -d '{"title":"test","body":"content","userId":1}'
+
+# Set custom timeout (milliseconds)
+curl http://192.168.1.100:43567/api/proxy/https://slow-api.example.com \
+  -H "X-Proxy-Timeout: 60000"
 ```
 
 ### Custom Endpoints (created via Visual Builder)
