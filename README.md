@@ -101,13 +101,7 @@ curl http://localhost:43567/api/status
 curl http://192.168.1.100:43567/api/status
 
 # Send notification to phone
-curl -X POST http://192.168.1.100:43567/api/notify \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Alert",
-    "body": "Server backup completed",
-    "priority": "HIGH"
-  }'
+curl -X POST http://192.168.1.100:43567/api/notify -H "Content-Type: application/json" -d '{"title":"Test Alert","body":"Your notification message here"}'
 
 # Get API documentation (Android 12+)
 curl http://192.168.1.100:43567/api/json
