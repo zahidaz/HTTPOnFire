@@ -77,7 +77,11 @@ fun TabHomeScreen(
         mutableStateOf(serverUrlPairs.firstOrNull()?.first)
     }
 
-    val routeUrlPairs = remember(homeUiState.networkAddresses, homeUiState.serverStatus, selectedRouteForShare?.path) {
+    val routeUrlPairs = remember(
+        homeUiState.networkAddresses,
+        homeUiState.serverStatus,
+        selectedRouteForShare?.path
+    ) {
         val route = selectedRouteForShare
         if (homeUiState.serverStatus != ServerStatus.STARTED || route == null) {
             emptyList()

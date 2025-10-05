@@ -12,9 +12,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.scale
 import com.azzahid.hof.MainActivity
 import com.azzahid.hof.R
-import androidx.core.graphics.scale
 
 class HttpServerNotificationManager(
     private val service: Service,
@@ -61,11 +61,14 @@ class HttpServerNotificationManager(
                         originalBitmap
                     }
                 }
+
                 else -> {
                     drawable?.let {
                         val maxSize = 128
-                        val width = minOf(it.intrinsicWidth.takeIf { w -> w > 0 } ?: maxSize, maxSize)
-                        val height = minOf(it.intrinsicHeight.takeIf { h -> h > 0 } ?: maxSize, maxSize)
+                        val width =
+                            minOf(it.intrinsicWidth.takeIf { w -> w > 0 } ?: maxSize, maxSize)
+                        val height =
+                            minOf(it.intrinsicHeight.takeIf { h -> h > 0 } ?: maxSize, maxSize)
                         val bitmap = createBitmap(width, height)
                         val canvas = Canvas(bitmap)
                         it.setBounds(0, 0, canvas.width, canvas.height)

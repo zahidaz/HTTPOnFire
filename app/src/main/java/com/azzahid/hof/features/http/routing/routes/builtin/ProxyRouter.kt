@@ -60,7 +60,8 @@ internal fun io.ktor.server.routing.Route.addProxyRoute(route: Route) {
                 }
 
                 val timeout = call.request.headers["X-Proxy-Timeout"]?.toLongOrNull() ?: 30000L
-                val render = call.request.headers["X-Proxy-Render"]?.toBooleanStrictOrNull() ?: false
+                val render =
+                    call.request.headers["X-Proxy-Render"]?.toBooleanStrictOrNull() ?: false
 
                 if (render) {
                     call.respond(
@@ -72,14 +73,21 @@ internal fun io.ktor.server.routing.Route.addProxyRoute(route: Route) {
 
                 val forwardHeaders = call.request.headers.entries()
                     .filter { (key, _) -> !key.startsWith("X-Proxy-", ignoreCase = true) }
-                    .filter { (key, _) -> key !in listOf(HttpHeaders.Host, HttpHeaders.Connection, HttpHeaders.ContentLength) }
+                    .filter { (key, _) ->
+                        key !in listOf(
+                            HttpHeaders.Host,
+                            HttpHeaders.Connection,
+                            HttpHeaders.ContentLength
+                        )
+                    }
 
                 val method = call.request.httpMethod
-                val requestBody = if (method in listOf(HttpMethod.Post, HttpMethod.Put, HttpMethod.Patch)) {
-                    call.receiveText()
-                } else {
-                    null
-                }
+                val requestBody =
+                    if (method in listOf(HttpMethod.Post, HttpMethod.Put, HttpMethod.Patch)) {
+                        call.receiveText()
+                    } else {
+                        null
+                    }
 
                 val client = HttpClient(CIO) {
                     expectSuccess = false
@@ -108,7 +116,11 @@ internal fun io.ktor.server.routing.Route.addProxyRoute(route: Route) {
                         val statusCode = HttpStatusCode.fromValue(response.status.value)
 
                         response.headers.entries().forEach { (key, values) ->
-                            if (key !in listOf(HttpHeaders.TransferEncoding, HttpHeaders.ContentLength)) {
+                            if (key !in listOf(
+                                    HttpHeaders.TransferEncoding,
+                                    HttpHeaders.ContentLength
+                                )
+                            ) {
                                 values.forEach { value ->
                                     call.response.headers.append(key, value)
                                 }

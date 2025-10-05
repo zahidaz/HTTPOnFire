@@ -28,7 +28,11 @@ internal suspend fun buildServerWithConfiguration(
     routes: List<Route>,
     httpRequestLogger: HttpRequestLogger? = null
 ): CIOEmbeddedServer {
-    return CoroutineScope(coroutineContext).embeddedServer(CIO, port = port, parentCoroutineContext = coroutineContext) {
+    return CoroutineScope(coroutineContext).embeddedServer(
+        CIO,
+        port = port,
+        parentCoroutineContext = coroutineContext
+    ) {
         setAndroidContext(androidContext)
         configureServerWithSettings(corsConfig, enableLogs, logLevel, httpRequestLogger)
         configureRoutingWithRoutes(routes)

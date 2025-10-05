@@ -8,8 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.azzahid.hof.Constants
-import com.azzahid.hof.domain.registry.BuiltInRouteRegistry
 import com.azzahid.hof.domain.model.RouteType
+import com.azzahid.hof.domain.registry.BuiltInRouteRegistry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

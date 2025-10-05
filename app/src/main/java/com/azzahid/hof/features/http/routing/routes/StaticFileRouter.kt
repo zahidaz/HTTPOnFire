@@ -1,10 +1,8 @@
 package com.azzahid.hof.features.http.routing.routes
 
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import com.azzahid.hof.domain.model.Route
-import com.azzahid.hof.domain.model.RouteType
 import com.azzahid.hof.features.http.androidContext
 import com.azzahid.hof.features.http.utils.FileServingUtils
 import io.github.smiley4.ktoropenapi.get

@@ -86,6 +86,7 @@ class HomeViewModel(
             } catch (_: Exception) {
                 "http://localhost:${currentState.serverPort}"
             }
+
             !isStarted -> null
             else -> currentState.serverUrl
         }
