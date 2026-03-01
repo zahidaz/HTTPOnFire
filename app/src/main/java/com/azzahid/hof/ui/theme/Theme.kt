@@ -41,19 +41,19 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = CyanDark,
     onPrimary = PureWhite,
-    primaryContainer = Cyan.copy(alpha = 0.12f),
+    primaryContainer = LightPrimaryContainer,
     onPrimaryContainer = CyanDark,
     secondary = VioletDark,
     onSecondary = PureWhite,
-    secondaryContainer = Violet.copy(alpha = 0.12f),
+    secondaryContainer = LightSecondaryContainer,
     onSecondaryContainer = VioletDark,
     tertiary = AmberDark,
     onTertiary = PureWhite,
-    tertiaryContainer = Amber.copy(alpha = 0.12f),
+    tertiaryContainer = LightTertiaryContainer,
     onTertiaryContainer = AmberDark,
     error = SoftRedDark,
     onError = PureWhite,
-    errorContainer = SoftRed.copy(alpha = 0.12f),
+    errorContainer = LightErrorContainer,
     onErrorContainer = SoftRedDark,
     background = LightBackground,
     onBackground = LightOnSurface,
@@ -64,10 +64,10 @@ private val LightColorScheme = lightColorScheme(
     outline = LightOutline,
     outlineVariant = LightOutline,
     surfaceContainerLowest = LightSurface,
-    surfaceContainerLow = LightBackground,
-    surfaceContainer = LightSurfaceVariant,
-    surfaceContainerHigh = LightOutline,
-    surfaceContainerHighest = LightOnSurfaceVariant
+    surfaceContainerLow = LightSurfaceContainerLow,
+    surfaceContainer = LightSurfaceContainer,
+    surfaceContainerHigh = LightSurfaceContainerHigh,
+    surfaceContainerHighest = LightSurfaceContainerHighest
 )
 
 @Composable
