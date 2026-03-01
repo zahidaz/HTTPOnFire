@@ -2,19 +2,34 @@ package com.azzahid.hof.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val WarmAmber = Color(0xFFFF8F00)
-val SoftOrange = Color(0xFFFF7043)
-val CozyBrown = Color(0xFF8D6E63)
+val Obsidian = Color(0xFF0D0D0F)
+val DarkGray = Color(0xFF1A1A1E)
+val MidGray = Color(0xFF252529)
+val SubtleGray = Color(0xFF2E2E33)
+val MutedGray = Color(0xFF6B6B76)
 
-val WarmAmberDeep = Color(0xFFE65100)
-val SoftOrangeDeep = Color(0xFFD84315)
-val CozyBrownDeep = Color(0xFF5D4037)
+val SoftWhite = Color(0xFFE8E8ED)
+val PureWhite = Color(0xFFF5F5F7)
 
-val WarmAmberLight = Color(0xFFFFF8E1)
-val SoftOrangeLight = Color(0xFFFBE9E7)
-val CozyBrownLight = Color(0xFFEFEBE9)
+val Cyan = Color(0xFF00D4AA)
+val CyanDark = Color(0xFF00A888)
+val CyanSubtle = Color(0xFF0D2E26)
 
-val CreamWhite = Color(0xFFFFFDF7)
-val WarmBlack = Color(0xFF3E2723)
-val WarmSurface = Color(0xFFFAF7F0)
-val DarkSurface = Color(0xFF4E342E)
+val Violet = Color(0xFFA78BFA)
+val VioletDark = Color(0xFF7C5CBF)
+val VioletSubtle = Color(0xFF1E1533)
+
+val Amber = Color(0xFFF59E0B)
+val AmberDark = Color(0xFFC47F09)
+val AmberSubtle = Color(0xFF2E2008)
+
+val SoftRed = Color(0xFFEF4444)
+val SoftRedDark = Color(0xFFB91C1C)
+val SoftRedSubtle = Color(0xFF2E1010)
+
+val LightBackground = Color(0xFFF8F8FA)
+val LightSurface = Color(0xFFFFFFFF)
+val LightSurfaceVariant = Color(0xFFEEEEF2)
+val LightOutline = Color(0xFFD0D0D8)
+val LightOnSurface = Color(0xFF1A1A1E)
+val LightOnSurfaceVariant = Color(0xFF5A5A66)

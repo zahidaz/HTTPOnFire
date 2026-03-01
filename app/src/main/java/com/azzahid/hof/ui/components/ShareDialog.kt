@@ -13,9 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.QrCode
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,7 +47,6 @@ fun ShareDialog(
     onCopyToClipboard: (String) -> Unit,
     route: Route? = null
 ) {
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -60,7 +59,7 @@ fun ShareDialog(
             color = MaterialTheme.colorScheme.surface
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -75,7 +74,7 @@ fun ShareDialog(
 
                     IconButton(onClick = onDismiss) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = Icons.Outlined.Close,
                             contentDescription = stringResource(R.string.action_close)
                         )
                     }
@@ -129,7 +128,7 @@ private fun NetworkAddressesCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.share_any_of),
@@ -213,7 +212,7 @@ private fun NetworkAddressItem(
                         modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.QrCode,
+                            imageVector = Icons.Outlined.QrCode,
                             contentDescription = stringResource(R.string.cd_show_qr_code),
                             tint = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
@@ -229,7 +228,7 @@ private fun NetworkAddressItem(
                         modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.ContentCopy,
+                            imageVector = Icons.Outlined.ContentCopy,
                             contentDescription = stringResource(R.string.cd_copy_url),
                             modifier = Modifier.size(16.dp)
                         )

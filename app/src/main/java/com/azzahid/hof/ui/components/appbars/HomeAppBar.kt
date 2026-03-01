@@ -8,16 +8,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,6 @@ fun HomeAppBar(
     onShareClick: () -> Unit,
     onSettingsClick: () -> Unit
 ) {
-
     @OptIn(ExperimentalMaterial3Api::class)
     TopAppBar(
         title = {
@@ -45,7 +45,7 @@ fun HomeAppBar(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(12.dp)
+                        .size(10.dp)
                         .clip(CircleShape)
                         .background(
                             when (serverStatus) {
@@ -78,11 +78,14 @@ fun HomeAppBar(
                 }
             }
         },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
         actions = {
             if (serverStatus == ServerStatus.STARTED) {
                 IconButton(onClick = onShareClick) {
                     Icon(
-                        imageVector = Icons.Default.Share,
+                        imageVector = Icons.Outlined.Share,
                         contentDescription = stringResource(R.string.cd_share_server_url)
                     )
                 }
@@ -93,9 +96,9 @@ fun HomeAppBar(
                 enabled = serverStatus !in listOf(ServerStatus.STARTING, ServerStatus.STOPPING)
             ) {
                 val icon = when (serverStatus) {
-                    ServerStatus.STARTED -> Icons.Default.Stop
-                    ServerStatus.STARTING, ServerStatus.STOPPING -> Icons.Default.Stop
-                    else -> Icons.Default.PlayArrow
+                    ServerStatus.STARTED -> Icons.Outlined.Stop
+                    ServerStatus.STARTING, ServerStatus.STOPPING -> Icons.Outlined.Stop
+                    else -> Icons.Outlined.PlayArrow
                 }
                 val actionText = if (serverStatus == ServerStatus.STARTED) {
                     stringResource(R.string.server_stop)
@@ -111,7 +114,7 @@ fun HomeAppBar(
 
             IconButton(onClick = onSettingsClick) {
                 Icon(
-                    imageVector = Icons.Default.Settings,
+                    imageVector = Icons.Outlined.Settings,
                     contentDescription = stringResource(R.string.cd_settings)
                 )
             }

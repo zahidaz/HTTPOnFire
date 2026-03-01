@@ -1,5 +1,6 @@
 package com.azzahid.hof.ui.screens.home.routes
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,10 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Api
-import androidx.compose.material.icons.filled.FolderOpen
+import androidx.compose.material.icons.outlined.Api
+import androidx.compose.material.icons.outlined.FolderOpen
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -47,18 +49,18 @@ fun RouteTypeSelectionScreen(
             modifier = Modifier
                 .weight(1f)
                 .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             RouteTypeCard(
-                icon = Icons.Default.FolderOpen,
+                icon = Icons.Outlined.FolderOpen,
                 displayName = stringResource(R.string.route_type_file_folder),
                 description = stringResource(R.string.route_type_file_folder_desc),
                 onSelect = onFileSystemSelected
             )
 
             RouteTypeCard(
-                icon = Icons.Default.Api,
+                icon = Icons.Outlined.Api,
                 displayName = stringResource(R.string.route_type_custom_response),
                 description = stringResource(R.string.route_type_custom_response_desc),
                 onSelect = onApiSelected
@@ -80,14 +82,14 @@ private fun RouteTypeCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
-        )
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(

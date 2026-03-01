@@ -1,17 +1,19 @@
 package com.azzahid.hof.ui.components.appbars
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.DeleteOutline
-import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.azzahid.hof.R
@@ -31,6 +33,9 @@ fun LogsAppBar(
         title = {
             Text(stringResource(R.string.logs_title, totalEntries))
         },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
         actions = {
             BadgedBox(
                 badge = {
@@ -41,7 +46,7 @@ fun LogsAppBar(
             ) {
                 IconButton(onClick = onStatsClick) {
                     Icon(
-                        imageVector = Icons.Default.BarChart,
+                        imageVector = Icons.Outlined.BarChart,
                         contentDescription = stringResource(R.string.cd_statistics)
                     )
                 }
@@ -49,7 +54,7 @@ fun LogsAppBar(
 
             IconButton(onClick = onFilterClick) {
                 Icon(
-                    imageVector = Icons.Default.FilterList,
+                    imageVector = Icons.Outlined.FilterList,
                     contentDescription = stringResource(R.string.cd_filter)
                 )
             }
@@ -57,7 +62,7 @@ fun LogsAppBar(
             if (hasLogs) {
                 IconButton(onClick = onCopyAllClick) {
                     Icon(
-                        imageVector = Icons.Default.ContentCopy,
+                        imageVector = Icons.Outlined.ContentCopy,
                         contentDescription = stringResource(R.string.cd_copy_all_logs)
                     )
                 }
@@ -66,7 +71,7 @@ fun LogsAppBar(
             if (hasLogs) {
                 IconButton(onClick = onClearClick) {
                     Icon(
-                        imageVector = Icons.Default.DeleteOutline,
+                        imageVector = Icons.Outlined.DeleteOutline,
                         contentDescription = stringResource(R.string.cd_clear_all_logs)
                     )
                 }
@@ -74,4 +79,3 @@ fun LogsAppBar(
         }
     )
 }
-

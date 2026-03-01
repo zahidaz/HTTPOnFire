@@ -11,17 +11,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
-import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
+import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -95,7 +98,6 @@ private fun FileSystemRouteBuilderContent(
     uiState: FileSystemRouteUiState,
     viewModel: FileSystemRouteBuilderViewModel
 ) {
-
     val filePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -113,17 +115,18 @@ private fun FileSystemRouteBuilderContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 20.dp, vertical = 16.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         if (uiState.selectedFile == null) {
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.filesystem_select_what_to_share),
@@ -147,7 +150,7 @@ private fun FileSystemRouteBuilderContent(
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(
-                                imageVector = Icons.AutoMirrored.Filled.InsertDriveFile,
+                                imageVector = Icons.AutoMirrored.Outlined.InsertDriveFile,
                                 contentDescription = null
                             )
                             Text(stringResource(R.string.filesystem_select_file))
@@ -160,7 +163,7 @@ private fun FileSystemRouteBuilderContent(
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Folder,
+                                imageVector = Icons.Outlined.Folder,
                                 contentDescription = null
                             )
                             Text(stringResource(R.string.filesystem_select_folder))
@@ -207,10 +210,11 @@ private fun SelectedItemCard(
     var isEditingRoutePath by remember { mutableStateOf(false) }
 
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
@@ -219,7 +223,7 @@ private fun SelectedItemCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(
-                    imageVector = if (item.isDirectory) Icons.Default.Folder else Icons.AutoMirrored.Filled.InsertDriveFile,
+                    imageVector = if (item.isDirectory) Icons.Outlined.Folder else Icons.AutoMirrored.Outlined.InsertDriveFile,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(32.dp)
@@ -325,10 +329,11 @@ private fun IndexHtmlOptionCard(
     onToggle: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
+            modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text(
@@ -341,7 +346,7 @@ private fun IndexHtmlOptionCard(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                androidx.compose.material3.Switch(
+                Switch(
                     checked = respectIndexHtml,
                     onCheckedChange = { onToggle() }
                 )
@@ -361,4 +366,3 @@ private fun IndexHtmlOptionCard(
         }
     }
 }
-

@@ -13,13 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Stop
-import androidx.compose.material3.AssistChip
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -76,10 +75,12 @@ fun RouteCard(
             else
                 MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.outline),
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -179,7 +180,7 @@ fun RouteCard(
                         modifier = Modifier.size(32.dp)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
+                            imageVector = Icons.Outlined.MoreVert,
                             contentDescription = stringResource(R.string.cd_more_options),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
@@ -204,7 +205,7 @@ fun RouteCard(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Default.Info,
+                                        imageVector = Icons.Outlined.Info,
                                         contentDescription = null,
                                         modifier = Modifier.size(20.dp)
                                     )
@@ -225,7 +226,7 @@ fun RouteCard(
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Default.Share,
+                                    imageVector = Icons.Outlined.Share,
                                     contentDescription = null,
                                     modifier = Modifier.size(20.dp)
                                 )
@@ -251,7 +252,7 @@ fun RouteCard(
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = if (route.isEnabled) Icons.Default.Stop else Icons.Default.PlayArrow,
+                                    imageVector = if (route.isEnabled) Icons.Outlined.Stop else Icons.Outlined.PlayArrow,
                                     contentDescription = null,
                                     tint = if (route.isEnabled)
                                         MaterialTheme.colorScheme.error
@@ -277,7 +278,7 @@ fun RouteCard(
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Default.Delete,
+                                        imageVector = Icons.Outlined.Delete,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.error,
                                         modifier = Modifier.size(20.dp)
@@ -346,9 +347,9 @@ internal fun MethodChip(method: HttpMethod) {
     }
 
     Surface(
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(4.dp),
         color = containerColor,
-        border = BorderStroke(1.dp, borderColor),
+        border = BorderStroke(0.5.dp, borderColor),
         modifier = Modifier.semantics {
             contentDescription = "${method.value} HTTP method"
         }
@@ -374,7 +375,7 @@ private fun StatusCodeChip(statusCode: Int) {
         else -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
     }
 
-    AssistChip(
+    androidx.compose.material3.AssistChip(
         onClick = { },
         label = {
             Text(
@@ -397,9 +398,9 @@ private fun StatusCodeChip(statusCode: Int) {
 @Composable
 private fun TypeChip(text: String, color: Color) {
     Surface(
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(4.dp),
         color = color.copy(alpha = 0.1f),
-        border = BorderStroke(1.dp, color),
+        border = BorderStroke(0.5.dp, color),
         modifier = Modifier.semantics {
             contentDescription = "$text Route type"
         }

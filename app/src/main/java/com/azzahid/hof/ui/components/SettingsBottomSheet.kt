@@ -13,8 +13,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,7 +63,8 @@ fun SettingsBottomSheet(
         )
         ModalBottomSheet(
             onDismissRequest = onDismiss,
-            sheetState = bottomSheetState
+            sheetState = bottomSheetState,
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             SettingsSheetContent(
                 settingsUiState = settingsUiState,
@@ -104,8 +105,8 @@ private fun SettingsSheetContent(
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp)
-            .padding(bottom = 32.dp),
+            .padding(horizontal = 20.dp)
+            .padding(top = 16.dp, bottom = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -118,7 +119,7 @@ private fun SettingsSheetContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Text(
                     text = stringResource(R.string.settings_server_config),
@@ -170,7 +171,10 @@ private fun SettingsSheetContent(
                         )
                     }
 
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        thickness = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outline
+                    )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -196,7 +200,10 @@ private fun SettingsSheetContent(
                         )
                     }
 
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        thickness = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outline
+                    )
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -230,7 +237,7 @@ private fun SettingsSheetContent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(20.dp)
                 ) {
                     Text(
                         text = stringResource(R.string.settings_log_management),
@@ -305,7 +312,7 @@ private fun SettingsSheetContent(
             var showAdvanced by rememberSaveable { mutableStateOf(false) }
 
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(20.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -320,7 +327,7 @@ private fun SettingsSheetContent(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Icon(
-                        imageVector = if (showAdvanced) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                        imageVector = if (showAdvanced) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                         contentDescription = null
                     )
                 }
@@ -329,7 +336,10 @@ private fun SettingsSheetContent(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        HorizontalDivider()
+                        HorizontalDivider(
+                            thickness = 0.5.dp,
+                            color = MaterialTheme.colorScheme.outline
+                        )
 
                         Text(
                             text = stringResource(R.string.settings_cors_config),

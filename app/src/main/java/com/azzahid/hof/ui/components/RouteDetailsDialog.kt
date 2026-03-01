@@ -13,9 +13,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -42,7 +42,6 @@ fun RouteDetailsDialog(
     route: Route,
     onDismiss: () -> Unit
 ) {
-
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -72,22 +71,21 @@ fun RouteDetailsDialog(
 
                     IconButton(onClick = onDismiss) {
                         Icon(
-                            imageVector = Icons.Default.Close,
+                            imageVector = Icons.Outlined.Close,
                             contentDescription = stringResource(R.string.action_close)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 RouteInfoSection(route = route)
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 PathSection(route = route)
 
-
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 when (val type = route.type) {
                     is RouteType.ApiRoute -> {
@@ -110,7 +108,6 @@ fun RouteDetailsDialog(
                         BuiltInRouteConfigSection()
                     }
                 }
-
             }
         }
     }
@@ -122,7 +119,7 @@ private fun PathSection(route: Route) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_path),
@@ -157,7 +154,7 @@ private fun RouteInfoSection(route: Route) {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -188,7 +185,7 @@ private fun RouteInfoSection(route: Route) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = if (route.isEnabled) Icons.Default.PlayArrow else Icons.Default.Stop,
+                    imageVector = if (route.isEnabled) Icons.Outlined.PlayArrow else Icons.Outlined.Stop,
                     contentDescription = null,
                     tint = if (route.isEnabled)
                         MaterialTheme.colorScheme.primary
@@ -212,14 +209,13 @@ private fun RouteInfoSection(route: Route) {
     }
 }
 
-
 @Composable
 private fun ApiRouteConfigSection(type: RouteType.ApiRoute) {
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_api_config),
@@ -276,7 +272,7 @@ private fun StaticFileConfigSection(type: RouteType.StaticFile) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_file_config),
@@ -300,7 +296,7 @@ private fun DirectoryConfigSection(type: RouteType.Directory) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_directory_config),
@@ -333,7 +329,7 @@ private fun RedirectConfigSection(type: RouteType.RedirectRoute) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_redirect_config),
@@ -362,7 +358,7 @@ private fun BuiltInRouteConfigSection() {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(20.dp)
         ) {
             Text(
                 text = stringResource(R.string.details_builtin_route),
@@ -405,4 +401,3 @@ private fun DetailRow(
     }
     Spacer(modifier = Modifier.height(4.dp))
 }
-

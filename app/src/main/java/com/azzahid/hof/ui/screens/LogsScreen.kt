@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.HourglassEmpty
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.HourglassEmpty
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -40,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -80,7 +79,7 @@ fun TabLogsScreen() {
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(16.dp),
+                .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             OutlinedTextField(
@@ -91,7 +90,7 @@ fun TabLogsScreen() {
                 },
                 label = { Text(stringResource(R.string.logs_search_placeholder)) },
                 leadingIcon = {
-                    Icon(Icons.Default.Search, contentDescription = null)
+                    Icon(Icons.Outlined.Search, contentDescription = null)
                 },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
@@ -145,7 +144,6 @@ fun TabLogsScreen() {
         )
     }
 
-
     uiState.selectedLog?.let { log ->
         LogDetailDialog(
             log = log,
@@ -161,13 +159,13 @@ private fun LogsDisabledCard() {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
-                .padding(32.dp)
+                .padding(40.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Default.VisibilityOff,
-                contentDescription = "Logging disabled",
+                imageVector = Icons.Outlined.VisibilityOff,
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -192,13 +190,13 @@ private fun EmptyLogsCard() {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
-                .padding(32.dp)
+                .padding(40.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(
-                imageVector = Icons.Default.HourglassEmpty,
-                contentDescription = "No logs available",
+                imageVector = Icons.Outlined.HourglassEmpty,
+                contentDescription = null,
                 modifier = Modifier.size(48.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -221,8 +219,7 @@ private fun LogsListCard(
     onLogClick: (HttpRequestLog) -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         LazyColumn(
             modifier = Modifier.padding(8.dp),
@@ -253,7 +250,7 @@ private fun LogItemCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -289,7 +286,7 @@ private fun LogItemCard(
 
             IconButton(onClick = onCopy) {
                 Icon(
-                    imageVector = Icons.Default.ContentCopy,
+                    imageVector = Icons.Outlined.ContentCopy,
                     contentDescription = stringResource(R.string.action_copy),
                     modifier = Modifier.size(16.dp)
                 )
@@ -300,21 +297,22 @@ private fun LogItemCard(
 
 @Composable
 private fun MethodChip(method: String) {
+    val (containerColor, contentColor) = when (method.uppercase()) {
+        "GET" -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+        "POST" -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
+        "PUT" -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+        "DELETE" -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+        "PATCH" -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
+        else -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+    }
+
     Surface(
-        color = when (method.uppercase()) {
-            "GET" -> Color(0xFF4CAF50)
-            "POST" -> Color(0xFF2196F3)
-            "PUT" -> Color(0xFFFF9800)
-            "DELETE" -> Color(0xFFF44336)
-            "PATCH" -> Color(0xFF9C27B0)
-            else -> MaterialTheme.colorScheme.primary
-        },
-        shape = CircleShape,
-        modifier = Modifier.clip(CircleShape)
+        color = containerColor,
+        shape = RoundedCornerShape(4.dp)
     ) {
         Text(
             text = method,
-            color = Color.White,
+            color = contentColor,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
         )
@@ -324,21 +322,21 @@ private fun MethodChip(method: String) {
 @Composable
 private fun StatusChip(statusCode: Int?) {
     statusCode?.let { code ->
-        val color = when (code) {
-            in 200..299 -> Color(0xFF4CAF50)
-            in 300..399 -> Color(0xFFFF9800)
-            in 400..499 -> Color(0xFFF44336)
-            in 500..599 -> Color(0xFF9C27B0)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant
+        val (containerColor, contentColor) = when (code) {
+            in 200..299 -> MaterialTheme.colorScheme.primaryContainer to MaterialTheme.colorScheme.onPrimaryContainer
+            in 300..399 -> MaterialTheme.colorScheme.tertiaryContainer to MaterialTheme.colorScheme.onTertiaryContainer
+            in 400..499 -> MaterialTheme.colorScheme.errorContainer to MaterialTheme.colorScheme.onErrorContainer
+            in 500..599 -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
+            else -> MaterialTheme.colorScheme.surfaceVariant to MaterialTheme.colorScheme.onSurfaceVariant
         }
 
         Surface(
-            color = color.copy(alpha = 0.1f),
-            shape = CircleShape
+            color = containerColor,
+            shape = RoundedCornerShape(4.dp)
         ) {
             Text(
                 text = code.toString(),
-                color = color,
+                color = contentColor,
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(horizontal = 6.dp, vertical = 1.dp)
             )
@@ -429,7 +427,11 @@ private fun StatisticsDialog(
                         uiState.totalEntries.toString(),
                         MaterialTheme.colorScheme.primary
                     )
-                    StatItem("Success", uiState.successCount.toString(), Color(0xFF4CAF50))
+                    StatItem(
+                        "Success",
+                        uiState.successCount.toString(),
+                        MaterialTheme.colorScheme.primary
+                    )
                     StatItem(
                         "Errors",
                         uiState.errorCount.toString(),

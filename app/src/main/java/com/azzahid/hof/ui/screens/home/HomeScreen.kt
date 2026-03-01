@@ -15,13 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Route
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -220,12 +223,30 @@ private fun HomeScreenContent(
         ) {
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                containerColor = MaterialTheme.colorScheme.background,
+                indicator = { tabPositions ->
+                    if (selectedTabIndex < tabPositions.size) {
+                        TabRowDefaults.PrimaryIndicator(
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                            height = 2.dp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
+                divider = {
+                    HorizontalDivider(
+                        thickness = 0.5.dp,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
                         selected = selectedTabIndex == index,
                         onClick = { selectedTabIndex = index },
+                        selectedContentColor = MaterialTheme.colorScheme.primary,
+                        unselectedContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         text = {
                             Text(
                                 text = title,
@@ -240,7 +261,7 @@ private fun HomeScreenContent(
                 0 -> UserRoutesList(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
                     routes = homeUiState.routes.filter { it.type !is RouteType.BuiltInRoute },
                     onToggleRoute = onToggleRoute,
                     onRemoveRoute = onRemoveRoute,
@@ -251,7 +272,7 @@ private fun HomeScreenContent(
                 1 -> BuiltInRoutesList(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(horizontal = 20.dp, vertical = 16.dp),
                     routes = homeUiState.routes.filter { it.type is RouteType.BuiltInRoute },
                     onShareRoute = onShareRoute,
                     onToggleRoute = onToggleRoute,
@@ -267,7 +288,7 @@ private fun HomeScreenContent(
                     .padding(16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Add,
+                    imageVector = Icons.Outlined.Add,
                     contentDescription = stringResource(R.string.cd_add_route)
                 )
             }
@@ -285,7 +306,7 @@ private fun BuiltInRoutesList(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
         if (routes.isNotEmpty()) {
@@ -317,7 +338,7 @@ private fun UserRoutesList(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(bottom = 80.dp)
     ) {
         if (routes.isNotEmpty()) {
@@ -349,13 +370,13 @@ private fun UserRoutesList(
                             imageVector = Icons.Outlined.Route,
                             contentDescription = null,
                             modifier = Modifier
-                                .size(64.dp)
+                                .size(48.dp)
                                 .padding(bottom = 16.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Text(
                             text = stringResource(R.string.home_empty_title),
-                            style = MaterialTheme.typography.headlineSmall,
+                            style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(8.dp))
