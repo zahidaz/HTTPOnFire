@@ -1,40 +1,120 @@
 <div align="center">
-  <img src="docs/app_icon.png" alt="HTTP on Fire Logo" width="120">
+  <img src="docs/app_icon.png" alt="HTTP on Fire" width="120">
 
 # HTTP on Fire
 
-[![Platform](https://img.shields.io/badge/Platform-Android-FF8F00?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
-[![License](https://img.shields.io/badge/License-Apache%202.0-E65100?style=for-the-badge)](LICENSE)
-[![Kotlin](https://img.shields.io/badge/Kotlin-FF7043?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-8D6E63?style=for-the-badge&logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Ktor](https://img.shields.io/badge/Ktor-5D4037?style=for-the-badge&logo=ktor&logoColor=white)](https://ktor.io)
+**Turn your Android phone into a powerful web server & remote control panel.**
+
+[![Platform](https://img.shields.io/badge/Android-0D0D0F?style=for-the-badge&logo=android&logoColor=00D4AA)](https://android.com)
+[![Kotlin](https://img.shields.io/badge/Kotlin-0D0D0F?style=for-the-badge&logo=kotlin&logoColor=A78BFA)](https://kotlinlang.org)
+[![Jetpack Compose](https://img.shields.io/badge/Compose-0D0D0F?style=for-the-badge&logo=jetpackcompose&logoColor=00D4AA)](https://developer.android.com/jetpack/compose)
+[![Ktor](https://img.shields.io/badge/Ktor-0D0D0F?style=for-the-badge&logo=ktor&logoColor=A78BFA)](https://ktor.io)
+[![License](https://img.shields.io/badge/Apache_2.0-0D0D0F?style=for-the-badge)](LICENSE)
+
+<br>
+
+<img src="docs/hof.gif" alt="HTTP on Fire Demo" width="700">
+
 </div>
+
+<br>
+
+## What is this?
+
+HTTP on Fire runs a **real HTTP server** on your Android device. Open a browser on any device in your network, and you get a full **remote control dashboard** — battery stats, flashlight, volume, camera, microphone, GPS, contacts, app management, and more. No root. No cloud. Everything stays on your local WiFi.
+
+You can also create custom endpoints, share files, host static websites, and build APIs — all from your phone.
+
+<br>
+
+## Screenshots
 
 <div align="center">
-No-code Android HTTP server and device management.
+<table>
+<tr>
+<td align="center"><b>Home</b></td>
+<td align="center"><b>Built-in APIs</b></td>
+<td align="center"><b>Settings</b></td>
+<td align="center"><b>Activity Log</b></td>
+</tr>
+<tr>
+<td><img src="docs/screenshot_home.png" width="200"></td>
+<td><img src="docs/screenshot_builtin.png" width="200"></td>
+<td><img src="docs/screenshot_settings.png" width="200"></td>
+<td><img src="docs/screenshot_logs.png" width="200"></td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td align="center"><b>Web Dashboard — Status</b></td>
+<td align="center"><b>Web Dashboard — Controls</b></td>
+</tr>
+<tr>
+<td><img src="docs/screenshot_dashboard.png" width="300"></td>
+<td><img src="docs/screenshot_dashboard2.png" width="300"></td>
+</tr>
+</table>
 </div>
 
-## Overview
+<br>
 
-A professional Android HTTP server application that transforms your mobile device into a
-full-featured web server. Works on your local WiFi network - you can share content and let other devices access your phone via its IP address.
+## Features
 
-<div align="center">
-  <img src="docs/hof.gif" alt="HTTP on Fire Demo">
-</div>
+### Remote Device Control
+
+| Feature | Endpoint | Description |
+|---------|----------|-------------|
+| **Dashboard** | `GET /api/dashboard` | Full web control panel — manage everything from a browser |
+| **Flashlight** | `POST /api/flashlight` | Toggle the torch on/off |
+| **Volume** | `GET/POST /api/volume` | Read or set media, ring, alarm, notification volume |
+| **Vibrate** | `POST /api/vibrate` | Vibrate the device for a custom duration |
+| **Find My Phone** | `POST /api/ring` | Play an alarm sound to locate the device |
+| **Text to Speech** | `POST /api/speak` | Speak text aloud through the device speakers |
+| **Clipboard** | `GET/POST /api/clipboard` | Read or write the device clipboard |
+| **Camera** | `POST /api/camera` | Capture a photo from front or back camera |
+| **Microphone** | `GET /api/mic/stream` | Live audio stream from the device mic |
+| **Notifications** | `POST /api/notify` | Push custom notifications to the device |
+| **App Launch** | `POST /api/apps/launch` | Launch any installed app by package name |
+| **App Stop** | `POST /api/apps/stop` | Stop background processes of an app |
+
+### Device Information
+
+| Feature | Endpoint | Description |
+|---------|----------|-------------|
+| **Battery** | `GET /api/battery` | Level, charging status, health, temperature |
+| **WiFi** | `GET /api/wifi` | SSID, IP, signal strength, frequency |
+| **Device Info** | `GET /api/device` | Model, OS, memory, storage |
+| **Location** | `GET /api/location` | GPS coordinates, altitude, accuracy |
+| **Contacts** | `GET /api/contacts` | Read device contacts |
+| **Installed Apps** | `GET /api/apps` | List all installed applications |
+
+### Server & Tools
+
+| Feature | Endpoint | Description |
+|---------|----------|-------------|
+| **Server Status** | `GET /api/status` | Health check and uptime |
+| **QR Code** | `GET /api/qr` | Generate QR codes from any text |
+| **Echo** | `GET /api/echo` | Mirror back request details |
+| **Proxy** | `GET /api/proxy` | Forward requests to external URLs |
+| **Swagger Docs** | `GET /api/swagger` | Interactive API documentation |
+| **OpenAPI Spec** | `GET /api/json` | Machine-readable API schema |
+
+### Content Hosting
+
+- **Static file serving** — share any file from your phone
+- **Directory browsing** — share entire folders with file explorer UI & upload support
+- **Custom endpoints** — create GET/POST/PUT/DELETE/PATCH routes with custom responses
+- **Redirect routes** — create short URLs that redirect to other destinations
+- **Route persistence** — all routes are saved in a local database across restarts
+
+<br>
 
 ## Installation
 
 ### Download APK
 
-Download the latest debug build from GitHub Releases:
-
-**[Download HTTP on Fire APK](https://github.com/zahidaz/HTTPOnFire/releases)**
-
-1. Go to the [Releases page](https://github.com/zahidaz/HTTPOnFire/releases)
-2. Download the latest APK file
-3. Enable "Install unknown apps" for your browser/file manager in Android settings
-4. Install the APK file
+Grab the latest build from [**GitHub Releases**](https://github.com/zahidaz/HTTPOnFire/releases).
 
 ### Build from Source
 
@@ -44,119 +124,67 @@ cd HTTPOnFire
 ./gradlew assembleDebug
 ```
 
-The APK will be generated in `app/build/outputs/apk/debug/`
+APK output: `app/build/outputs/apk/debug/`
 
-## Features
+<br>
 
-### Current Features
-
-- [x] **HTTP server hosting** - Turn your phone into a website that you can share with others
-- [x] **Visual API route builder** - Build web pages using simple forms without writing any code
-- [x] **Static file serving** - Share any file from your phone directly through the web
-- [x] **Directory browsing and static website hosting** - Share entire folders for easy browsing and downloading
-- [x] **Custom HTTP endpoints (GET, POST, PUT, DELETE, PATCH)** - Create custom responses with text, files, or redirects
-- [x] **OpenAPI documentation with Swagger UI** - Get professional API documentation generated automatically *(Android 12+ required)*
-- [x] **CORS configuration** - Control which websites and devices can access your server
-- [x] **Route persistence with Room database** - Keep all your custom pages saved between app restarts
-- [x] **Request monitoring and logs** - See who visits your server with detailed activity logs
-- [x] **Device notification API endpoint** - Receive notifications on your phone from other devices via web requests
-- [x] **HTTP proxy endpoint** - Your phone acts as a proxy server that fetches any URL and returns the content to the client *(WebView rendering coming in Phase 2)*
-
-### Planned Features
-
-- [ ] **File upload handling** - Accept file uploads to your phone through the browser
-- [ ] **Device trigger endpoints (flashlight, vibration, volume control)** - Remotely control your phone's hardware features
-- [ ] **SQLite database, query builder and query routes** - Build and query databases on your phone through web interface
-- [ ] **App management endpoints (install, uninstall, launch apps)** - Remotely manage your phone's apps via web commands
-- [ ] **Device sensors data exposure (accelerometer, gyroscope, GPS)** - Expose your phone's sensor data through web endpoints
-- [ ] **Device information API endpoints (battery, storage, network)** - Share your phone's system information via web requests
-- [ ] **Authentication system with pre-shipped themed login pages** - Protect your server with ready-made login screens
-- [ ] **HTTP proxy WebView rendering (Phase 2)** - Option to render pages through WebView before returning content to bypass anti-bot measures and execute JavaScript
-- [ ] **Redirect routes** - Create custom URLs that redirect visitors to other websites
-- [ ] **Third-party content provider integration (Contacts, SMS, Calendar, Photos)** - Expose your phone's personal data through web endpoints
-- [ ] **Device AI model exposure** - Run and access AI models on your phone via web requests
-- [ ] **IFTTT-style logic composer with input/output chains** - Build automated workflows triggered by web requests
-- [ ] **Camera and microphone access endpoints** - Remotely access your phone's camera and microphone via web
-
-## Usage Examples
-
-The server runs on port `43567` by default. Replace `192.168.1.100` with your phone's actual IP address.
-
-### Running on Android Emulator
-
-When using Android Emulator, you'll need to set up port forwarding since the emulator runs in an isolated network:
-
-```bash
-# Set up port forwarding (run this in your terminal)
-adb forward tcp:43567 tcp:43567
-
-# Then use localhost instead of phone IP
-curl http://localhost:43567/api/status
-```
-
-### Built-in API Endpoints
+## Quick Start
 
 ```bash
 # Check server status
-curl http://192.168.1.100:43567/api/status
+curl http://<phone-ip>:43567/api/status
 
-# Send notification to phone
-curl -X POST http://192.168.1.100:43567/api/notify -H "Content-Type: application/json" -d '{"title":"Test Alert","body":"Your notification message here"}'
+# Open the dashboard in your browser
+open http://<phone-ip>:43567/api/dashboard
 
-# Get API documentation (Android 12+)
-curl http://192.168.1.100:43567/api/json
+# Toggle flashlight
+curl -X POST "http://<phone-ip>:43567/api/flashlight?enable=true"
 
-# Browse API docs in browser
-# Visit: http://192.168.1.100:43567/api/swagger
+# Capture a photo
+curl -X POST "http://<phone-ip>:43567/api/camera?facing=back" -o photo.jpg
 
-# Proxy external URLs through your phone
-curl http://192.168.1.100:43567/api/proxy/https://api.github.com/users/github
-
-# Proxy with custom headers
-curl http://192.168.1.100:43567/api/proxy/https://httpbin.org/headers \
-  -H "Authorization: Bearer your-token" \
-  -H "X-Custom-Header: value"
-
-# Proxy POST requests
-curl -X POST http://192.168.1.100:43567/api/proxy/https://jsonplaceholder.typicode.com/posts \
+# Send a notification
+curl -X POST http://<phone-ip>:43567/api/notify \
   -H "Content-Type: application/json" \
-  -d '{"title":"test","body":"content","userId":1}'
+  -d '{"title":"Hello","body":"From my laptop!"}'
 
-# Set custom timeout (milliseconds)
-curl http://192.168.1.100:43567/api/proxy/https://slow-api.example.com \
-  -H "X-Proxy-Timeout: 60000"
+# Launch an app
+curl -X POST "http://<phone-ip>:43567/api/apps/launch?package=com.android.chrome"
+
+# Listen to live microphone (open in browser)
+open "http://<phone-ip>:43567/api/mic/stream"
 ```
 
-### Custom Endpoints (created via Visual Builder)
+> **Emulator?** Run `adb forward tcp:43567 tcp:43567` then use `localhost` instead of the phone IP.
 
-```bash
-# Custom API endpoint
-curl http://192.168.1.100:43567/api/hello
+<br>
 
-# File download
-curl http://192.168.1.100:43567/files/document.pdf -o document.pdf
+## Tech Stack
 
-# Directory browsing
-# Visit: http://192.168.1.100:43567/shared/
-```
+| Layer | Technology |
+|-------|-----------|
+| Platform | Android (SDK 24–36) |
+| Language | Kotlin |
+| UI | Jetpack Compose + Material 3 |
+| Architecture | MVVM + StateFlow |
+| Server | Ktor CIO |
+| API Docs | OpenAPI + Swagger UI |
+| Database | Room |
+| Build | Gradle + Version Catalogs |
+
+<br>
 
 ## Contributing
 
-Contributions are welcome! Whether you're fixing bugs, adding features, or improving documentation,
-your help is appreciated.
+Contributions welcome — bug fixes, new endpoints, UI improvements, docs. Open an issue or send a PR.
+
+<br>
 
 ## License
 
+```
 Copyright 2025 zahidaz
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Licensed under the Apache License, Version 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+```
