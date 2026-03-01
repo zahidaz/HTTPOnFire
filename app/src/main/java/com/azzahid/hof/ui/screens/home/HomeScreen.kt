@@ -17,16 +17,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Route
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -108,23 +112,50 @@ fun TabHomeScreen(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        HomeAppBar(
-            serverStatus = homeUiState.serverStatus,
-            serverPort = homeUiState.serverPort.toIntOrNull() ?: Constants.DEFAULT_PORT,
-            onToggleServer = homeViewModel::toggleServer,
-            onShareClick = { showShareDialog = true },
-            onSettingsClick = { showSettingsSheet = true }
-        )
+    val snackbarHostState = remember { SnackbarHostState() }
+    var previousServerStatus by remember { mutableStateOf(homeUiState.serverStatus) }
+    val serverPort = homeUiState.serverPort.toIntOrNull() ?: Constants.DEFAULT_PORT
+    val startedMessage = stringResource(R.string.server_snackbar_started, serverPort)
+    val errorMessage = stringResource(R.string.server_snackbar_error)
 
-        HomeScreenContent(
-            modifier = Modifier.weight(1f),
-            homeUiState = homeUiState,
-            onToggleRoute = homeViewModel::toggleRoute,
-            onRemoveRoute = homeViewModel::removeRoute,
-            onNavigateToRouteBuilder = onNavigateToRouteBuilder,
-            onShowRouteDetails = { route -> selectedRouteForDetails = route },
-            onShareRoute = { route -> selectedRouteForShare = route }
+    LaunchedEffect(homeUiState.serverStatus) {
+        val current = homeUiState.serverStatus
+        if (current != previousServerStatus) {
+            when (current) {
+                ServerStatus.STARTED -> snackbarHostState.showSnackbar(startedMessage)
+                ServerStatus.ERROR -> snackbarHostState.showSnackbar(errorMessage)
+                else -> {}
+            }
+            previousServerStatus = current
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            HomeAppBar(
+                serverStatus = homeUiState.serverStatus,
+                serverPort = serverPort,
+                onToggleServer = homeViewModel::toggleServer,
+                onShareClick = { showShareDialog = true },
+                onSettingsClick = { showSettingsSheet = true }
+            )
+
+            HomeScreenContent(
+                modifier = Modifier.weight(1f),
+                homeUiState = homeUiState,
+                onToggleRoute = homeViewModel::toggleRoute,
+                onRemoveRoute = homeViewModel::removeRoute,
+                onNavigateToRouteBuilder = onNavigateToRouteBuilder,
+                onShowRouteDetails = { route -> selectedRouteForDetails = route },
+                onShareRoute = { route -> selectedRouteForShare = route }
+            )
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp)
         )
     }
 
@@ -267,6 +298,7 @@ private fun HomeScreenContent(
                     onRemoveRoute = onRemoveRoute,
                     onShowRouteDetails = onShowRouteDetails,
                     onShareRoute = onShareRoute,
+                    onNavigateToRouteBuilder = onNavigateToRouteBuilder,
                 )
 
                 1 -> BuiltInRoutesList(
@@ -335,6 +367,7 @@ private fun UserRoutesList(
     onShowRouteDetails: (Route) -> Unit,
     onShareRoute: (Route) -> Unit,
     onToggleRoute: (Route) -> Unit,
+    onNavigateToRouteBuilder: (String?) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
@@ -385,6 +418,16 @@ private fun UserRoutesList(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Button(onClick = { onNavigateToRouteBuilder(null) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Add,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.padding(start = 8.dp))
+                            Text(stringResource(R.string.home_empty_button))
+                        }
                     }
                 }
             }

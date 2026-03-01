@@ -18,82 +18,30 @@ import androidx.compose.material.icons.automirrored.outlined.InsertDriveFile
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.azzahid.hof.R
 import com.azzahid.hof.domain.state.FileSelection
 import com.azzahid.hof.domain.state.FileSystemRouteUiState
-import com.azzahid.hof.ui.components.appbars.FileSystemRouteAppBar
-import com.azzahid.hof.ui.providers.LocalViewModelFactory
 import com.azzahid.hof.ui.viewmodel.route.FileSystemRouteBuilderViewModel
-import kotlinx.coroutines.launch
 
 @Composable
-fun FileSystemRouteBuilderScreen(
-    onNavigateBack: () -> Unit,
-    onRouteCreated: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    LocalContext.current
-    val viewModelFactory = LocalViewModelFactory.current
-    val viewModel: FileSystemRouteBuilderViewModel = viewModel(factory = viewModelFactory)
-    val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    Column(modifier = modifier.fillMaxSize()) {
-        FileSystemRouteAppBar(
-            isValid = uiState.isValid,
-            onNavigateBack = onNavigateBack,
-            onSave = {
-                viewModel.saveRoute(
-                    onSuccess = onRouteCreated,
-                    onError = { error ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar(error)
-                        }
-                    }
-                )
-            }
-        )
-
-        FileSystemRouteBuilderContent(
-            modifier = Modifier.weight(1f),
-            uiState = uiState,
-            viewModel = viewModel
-        )
-
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
-@Composable
-private fun FileSystemRouteBuilderContent(
+internal fun FileSystemRouteBuilderContent(
     modifier: Modifier = Modifier,
     uiState: FileSystemRouteUiState,
     viewModel: FileSystemRouteBuilderViewModel

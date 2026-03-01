@@ -98,7 +98,10 @@
     <string name="home_tab_user">My Links</string>
     <string name="home_tab_system">Built-in</string>
     <string name="home_empty_title">No links created yet</string>
-    <string name="home_empty_subtitle">Tap the + button to create your first link</string>
+    <string name="home_empty_subtitle">Share files, folders, or custom responses from your device</string>
+    <string name="home_empty_button">Create Your First Link</string>
+    <string name="server_snackbar_started">Server running on port %d</string>
+    <string name="server_snackbar_error">Server failed to start</string>
 
     <!-- Logs Screen -->
     <string name="logs_title">Activity Log (%d)</string>

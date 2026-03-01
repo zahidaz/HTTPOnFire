@@ -236,71 +236,96 @@ private fun SettingsSheetContent(
             Card(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                var showLogManagement by rememberSaveable { mutableStateOf(false) }
+
                 Column(
                     modifier = Modifier.padding(20.dp)
                 ) {
-                    Text(
-                        text = stringResource(R.string.settings_log_management),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    OutlinedTextField(
-                        value = settingsUiState.logRetentionDays,
-                        onValueChange = { days ->
-                            if (days.all { it.isDigit() } && days.length <= 3) {
-                                onUpdateLogRetentionDays(days)
-                            }
-                        },
-                        label = { Text(stringResource(R.string.settings_log_retention)) },
-                        supportingText = { Text(stringResource(R.string.settings_log_retention_help)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = settingsUiState.logRetentionDays.toIntOrNull()
-                            ?.let { it < 1 || it > 365 } ?: false,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    OutlinedTextField(
-                        value = settingsUiState.maxLogEntries,
-                        onValueChange = { entries ->
-                            if (entries.all { it.isDigit() } && entries.length <= 6) {
-                                onUpdateMaxLogEntries(entries)
-                            }
-                        },
-                        label = { Text(stringResource(R.string.settings_max_log_entries)) },
-                        supportingText = { Text(stringResource(R.string.settings_max_log_entries_help)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = settingsUiState.maxLogEntries.toIntOrNull()
-                            ?.let { it < 100 || it > 100000 } ?: false,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showLogManagement = !showLogManagement }
+                            .padding(vertical = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Top
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column(
-                            modifier = Modifier.weight(1f)
-                        ) {
-                            Text(
-                                text = stringResource(R.string.settings_auto_cleanup),
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                            Text(
-                                text = stringResource(R.string.settings_auto_cleanup_desc),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Switch(
-                            checked = settingsUiState.autoCleanupEnabled,
-                            onCheckedChange = onUpdateAutoCleanupEnabled
+                        Text(
+                            text = stringResource(R.string.settings_log_management),
+                            style = MaterialTheme.typography.titleMedium
                         )
+                        Icon(
+                            imageVector = if (showLogManagement) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
+                            contentDescription = null
+                        )
+                    }
+
+                    AnimatedVisibility(visible = showLogManagement) {
+                        Column {
+                            HorizontalDivider(
+                                thickness = 0.5.dp,
+                                color = MaterialTheme.colorScheme.outline
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            OutlinedTextField(
+                                value = settingsUiState.logRetentionDays,
+                                onValueChange = { days ->
+                                    if (days.all { it.isDigit() } && days.length <= 3) {
+                                        onUpdateLogRetentionDays(days)
+                                    }
+                                },
+                                label = { Text(stringResource(R.string.settings_log_retention)) },
+                                supportingText = { Text(stringResource(R.string.settings_log_retention_help)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = settingsUiState.logRetentionDays.toIntOrNull()
+                                    ?.let { it < 1 || it > 365 } ?: false,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            OutlinedTextField(
+                                value = settingsUiState.maxLogEntries,
+                                onValueChange = { entries ->
+                                    if (entries.all { it.isDigit() } && entries.length <= 6) {
+                                        onUpdateMaxLogEntries(entries)
+                                    }
+                                },
+                                label = { Text(stringResource(R.string.settings_max_log_entries)) },
+                                supportingText = { Text(stringResource(R.string.settings_max_log_entries_help)) },
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                isError = settingsUiState.maxLogEntries.toIntOrNull()
+                                    ?.let { it < 100 || it > 100000 } ?: false,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.Top
+                            ) {
+                                Column(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.settings_auto_cleanup),
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.settings_auto_cleanup_desc),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Switch(
+                                    checked = settingsUiState.autoCleanupEnabled,
+                                    onCheckedChange = onUpdateAutoCleanupEnabled
+                                )
+                            }
+                        }
                     }
                 }
             }

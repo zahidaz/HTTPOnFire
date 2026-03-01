@@ -1,5 +1,6 @@
 package com.azzahid.hof.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -82,19 +84,30 @@ fun TabLogsScreen() {
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            OutlinedTextField(
-                value = searchQuery,
-                onValueChange = {
-                    searchQuery = it
-                    logsViewModel.setSearchQuery(it)
-                },
-                label = { Text(stringResource(R.string.logs_search_placeholder)) },
-                leadingIcon = {
-                    Icon(Icons.Outlined.Search, contentDescription = null)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
+            val showSearch = uiState.enableLogs && uiState.logs.isNotEmpty()
+
+            LaunchedEffect(showSearch) {
+                if (!showSearch && searchQuery.isNotEmpty()) {
+                    searchQuery = ""
+                    logsViewModel.setSearchQuery("")
+                }
+            }
+
+            AnimatedVisibility(visible = showSearch) {
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = {
+                        searchQuery = it
+                        logsViewModel.setSearchQuery(it)
+                    },
+                    label = { Text(stringResource(R.string.logs_search_placeholder)) },
+                    leadingIcon = {
+                        Icon(Icons.Outlined.Search, contentDescription = null)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+            }
 
             if (uiState.isLoading) {
                 Box(

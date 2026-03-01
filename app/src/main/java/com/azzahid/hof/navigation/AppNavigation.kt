@@ -14,9 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.azzahid.hof.ui.screens.TabLogsScreen
 import com.azzahid.hof.ui.screens.home.TabHomeScreen
-import com.azzahid.hof.ui.screens.home.routes.ApiRouteBuilderScreen
-import com.azzahid.hof.ui.screens.home.routes.FileSystemRouteBuilderScreen
-import com.azzahid.hof.ui.screens.home.routes.RouteTypeSelectionScreen
+import com.azzahid.hof.ui.screens.home.routes.RouteBuilderScreen
 import kotlinx.serialization.Serializable
 
 
@@ -29,22 +27,7 @@ sealed class Screen {
     data object Logs : Screen()
 
     @Serializable
-    data object RouteTypeSelection : Screen()
-
-    @Serializable
-    sealed class RouteBuilder : Screen() {
-        @Serializable
-        data object Api : RouteBuilder()
-
-        @Serializable
-        data object FileSystem : RouteBuilder()
-
-        @Serializable
-        data object Redirect : RouteBuilder()
-
-        @Serializable
-        data object Proxy : RouteBuilder()
-    }
+    data object RouteBuilder : Screen()
 }
 
 object AppAnimations {
@@ -87,7 +70,7 @@ fun AppNavigation(
         ) {
             TabHomeScreen(
                 onNavigateToRouteBuilder = {
-                    navController.navigate(Screen.RouteTypeSelection)
+                    navController.navigate(Screen.RouteBuilder)
                 }
             )
         }
@@ -101,32 +84,13 @@ fun AppNavigation(
             TabLogsScreen()
         }
 
-        composable<Screen.RouteTypeSelection>(
+        composable<Screen.RouteBuilder>(
             enterTransition = { AppAnimations.slideEnterRight },
             exitTransition = { AppAnimations.slideExitLeft },
             popEnterTransition = { AppAnimations.slideEnterLeft },
             popExitTransition = { AppAnimations.slideExitRight }
         ) {
-            RouteTypeSelectionScreen(
-                onFileSystemSelected = {
-                    navController.navigate(Screen.RouteBuilder.FileSystem)
-                },
-                onApiSelected = {
-                    navController.navigate(Screen.RouteBuilder.Api)
-                },
-                onNavigateBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable<Screen.RouteBuilder.FileSystem>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
-        ) {
-            FileSystemRouteBuilderScreen(
+            RouteBuilderScreen(
                 onNavigateBack = {
                     navController.popBackStack()
                 },
@@ -136,43 +100,6 @@ fun AppNavigation(
                     }
                 }
             )
-        }
-
-        composable<Screen.RouteBuilder.Api>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
-        ) {
-            ApiRouteBuilderScreen(
-                onNavigateBack = {
-                    navController.popBackStack()
-                },
-                onRouteCreated = {
-                    navController.navigate(Screen.Home) {
-                        popUpTo(Screen.Home) { inclusive = false }
-                    }
-                }
-            )
-        }
-
-        composable<Screen.RouteBuilder.Redirect>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
-        ) {
-            // TODO: implement redirect Route builder screen
-        }
-
-        composable<Screen.RouteBuilder.Proxy>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
-        ) {
-            // TODO: implement proxy Route builder screen
         }
     }
 }
-

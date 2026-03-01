@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -26,73 +25,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.azzahid.hof.R
 import com.azzahid.hof.domain.state.ApiRouteUiState
 import com.azzahid.hof.domain.state.HeaderEntry
-import com.azzahid.hof.ui.components.appbars.RouteBuilderAppBar
-import com.azzahid.hof.ui.providers.LocalViewModelFactory
 import com.azzahid.hof.ui.viewmodel.route.ApiRouteBuilderViewModel
 import io.ktor.http.HttpMethod
-import kotlinx.coroutines.launch
 
 @Composable
-fun ApiRouteBuilderScreen(
-    onNavigateBack: () -> Unit,
-    onRouteCreated: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val viewModelFactory = LocalViewModelFactory.current
-    val viewModel: ApiRouteBuilderViewModel = viewModel(factory = viewModelFactory)
-    val uiState by viewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    Column(modifier = modifier.fillMaxSize()) {
-        RouteBuilderAppBar(
-            isValid = uiState.isValid,
-            onNavigateBack = onNavigateBack,
-            onSave = {
-                viewModel.saveRoute(
-                    onSuccess = onRouteCreated,
-                    onError = { error ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar(error)
-                        }
-                    }
-                )
-            }
-        )
-
-        ApiRouteBuilderContent(
-            modifier = Modifier.weight(1f),
-            uiState = uiState,
-            viewModel = viewModel
-        )
-
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.padding(16.dp)
-        )
-    }
-}
-
-@Composable
-private fun ApiRouteBuilderContent(
+internal fun ApiRouteBuilderContent(
     modifier: Modifier = Modifier,
     uiState: ApiRouteUiState,
     viewModel: ApiRouteBuilderViewModel
