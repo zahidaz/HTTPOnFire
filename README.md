@@ -108,7 +108,13 @@ You can also create custom endpoints, share files, host static websites, and bui
 
 ### Download APK
 
-Grab the latest build from [**GitHub Releases**](https://github.com/zahidaz/HTTPOnFire/releases).
+<div align="center">
+<a href="https://github.com/zahidaz/HTTPOnFire/releases">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fgithub.com%2Fzahidaz%2FHTTPOnFire%2Freleases&bgcolor=0D0D0F&color=00D4AA" alt="Download QR Code" width="180">
+</a>
+
+Scan or [**download from GitHub Releases**](https://github.com/zahidaz/HTTPOnFire/releases)
+</div>
 
 ### Build from Source
 
