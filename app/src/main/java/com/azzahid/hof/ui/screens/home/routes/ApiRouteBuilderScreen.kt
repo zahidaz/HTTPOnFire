@@ -50,7 +50,8 @@ internal fun ApiRouteBuilderContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(horizontal = 20.dp)
+            .padding(top = 16.dp, bottom = 80.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

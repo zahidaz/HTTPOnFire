@@ -28,14 +28,14 @@ private val DarkColorScheme = darkColorScheme(
     surface = DarkGray,
     onSurface = SoftWhite,
     surfaceVariant = MidGray,
-    onSurfaceVariant = MutedGray,
-    outline = SubtleGray,
+    onSurfaceVariant = SecondaryText,
+    outline = OutlineGray,
     outlineVariant = SubtleGray,
     surfaceContainerLowest = Obsidian,
     surfaceContainerLow = DarkGray,
     surfaceContainer = MidGray,
     surfaceContainerHigh = SubtleGray,
-    surfaceContainerHighest = MutedGray
+    surfaceContainerHighest = CardGray
 )
 
 private val LightColorScheme = lightColorScheme(

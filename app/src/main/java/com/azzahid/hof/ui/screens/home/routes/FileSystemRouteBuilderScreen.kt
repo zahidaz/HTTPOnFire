@@ -6,10 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -63,7 +65,8 @@ internal fun FileSystemRouteBuilderContent(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(horizontal = 20.dp)
+            .padding(top = 16.dp, bottom = 80.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -101,7 +104,11 @@ internal fun FileSystemRouteBuilderContent(
                                 imageVector = Icons.AutoMirrored.Outlined.InsertDriveFile,
                                 contentDescription = null
                             )
-                            Text(stringResource(R.string.filesystem_select_file))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(R.string.filesystem_select_file),
+                                maxLines = 1
+                            )
                         }
 
                         Button(
@@ -114,7 +121,11 @@ internal fun FileSystemRouteBuilderContent(
                                 imageVector = Icons.Outlined.Folder,
                                 contentDescription = null
                             )
-                            Text(stringResource(R.string.filesystem_select_folder))
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = stringResource(R.string.filesystem_select_folder),
+                                maxLines = 1
+                            )
                         }
                     }
                 }
