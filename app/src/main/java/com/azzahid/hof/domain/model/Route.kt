@@ -6,11 +6,27 @@ import com.azzahid.hof.features.http.routing.routes.addApi
 import com.azzahid.hof.features.http.routing.routes.addDirectory
 import com.azzahid.hof.features.http.routing.routes.addRedirect
 import com.azzahid.hof.features.http.routing.routes.addStaticFile
+import com.azzahid.hof.features.http.routing.routes.builtin.addAppListRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addBatteryRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addCameraRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addDashboardRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addClipboardRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addContactsRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addDeviceInfoRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addEchoRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addFlashlightRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addLocationRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addNotificationRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addOpenApiRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addProxyRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addQrCodeRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addRingRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addStatusRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addSwaggerRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addTtsRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addVibrateRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addVolumeRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addWifiInfoRoute
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.Serializable
@@ -114,6 +130,118 @@ sealed class RouteType {
     object ProxyRoute : BuiltInRoute() {
         override fun handler(route: Route): ServerRoute.() -> Unit = {
             addProxyRoute(route)
+        }
+    }
+
+    @Serializable
+    object EchoRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addEchoRoute(route)
+        }
+    }
+
+    @Serializable
+    object DeviceInfoRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addDeviceInfoRoute(route)
+        }
+    }
+
+    @Serializable
+    object BatteryRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addBatteryRoute(route)
+        }
+    }
+
+    @Serializable
+    object QrCodeRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addQrCodeRoute(route)
+        }
+    }
+
+    @Serializable
+    object AppListRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addAppListRoute(route)
+        }
+    }
+
+    @Serializable
+    object ClipboardRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addClipboardRoute(route)
+        }
+    }
+
+    @Serializable
+    object VolumeRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addVolumeRoute(route)
+        }
+    }
+
+    @Serializable
+    object TtsRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addTtsRoute(route)
+        }
+    }
+
+    @Serializable
+    object WifiInfoRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addWifiInfoRoute(route)
+        }
+    }
+
+    @Serializable
+    object VibrateRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addVibrateRoute(route)
+        }
+    }
+
+    @Serializable
+    object FlashlightRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addFlashlightRoute(route)
+        }
+    }
+
+    @Serializable
+    object RingRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addRingRoute(route)
+        }
+    }
+
+    @Serializable
+    object LocationRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addLocationRoute(route)
+        }
+    }
+
+    @Serializable
+    object ContactsRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addContactsRoute(route)
+        }
+    }
+
+    @Serializable
+    object CameraRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addCameraRoute(route)
+        }
+    }
+
+    @Serializable
+    object DashboardRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addDashboardRoute(route)
         }
     }
 

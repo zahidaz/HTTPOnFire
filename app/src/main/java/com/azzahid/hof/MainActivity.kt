@@ -58,6 +58,7 @@ fun AppWithNavigation() {
     val currentScreen = when (currentDestination?.route) {
         Screen.Home::class.qualifiedName -> Screen.Home
         Screen.Logs::class.qualifiedName -> Screen.Logs
+        Screen.Settings::class.qualifiedName -> Screen.Settings
         else -> null
     }
 
@@ -85,6 +86,15 @@ fun AppWithNavigation() {
                 },
                 onNavigateToLogs = {
                     navController.navigate(Screen.Logs) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToSettings = {
+                    navController.navigate(Screen.Settings) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }

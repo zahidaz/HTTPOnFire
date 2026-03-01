@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.PlayArrow
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,8 +32,7 @@ fun HomeAppBar(
     serverStatus: ServerStatus,
     serverPort: Int,
     onToggleServer: () -> Unit,
-    onShareClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onShareClick: () -> Unit
 ) {
     @OptIn(ExperimentalMaterial3Api::class)
     TopAppBar(
@@ -109,13 +107,6 @@ fun HomeAppBar(
                 Icon(
                     imageVector = icon,
                     contentDescription = stringResource(R.string.cd_start_stop_server, actionText)
-                )
-            }
-
-            IconButton(onClick = onSettingsClick) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = stringResource(R.string.cd_settings)
                 )
             }
         }

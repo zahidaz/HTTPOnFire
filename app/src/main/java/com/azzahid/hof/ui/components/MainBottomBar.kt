@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +29,13 @@ private data class TabItem(
 fun MainBottomBar(
     currentScreen: Screen,
     onNavigateToHome: () -> Unit,
-    onNavigateToLogs: () -> Unit
+    onNavigateToLogs: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     val tabs = listOf(
         TabItem(R.string.nav_home, Icons.Outlined.Home, Screen.Home),
-        TabItem(R.string.nav_logs, Icons.AutoMirrored.Outlined.Assignment, Screen.Logs)
+        TabItem(R.string.nav_logs, Icons.AutoMirrored.Outlined.Assignment, Screen.Logs),
+        TabItem(R.string.nav_settings, Icons.Outlined.Settings, Screen.Settings)
     )
 
     Column {
@@ -52,6 +55,7 @@ fun MainBottomBar(
                         when (tab.screen) {
                             Screen.Home -> onNavigateToHome()
                             Screen.Logs -> onNavigateToLogs()
+                            Screen.Settings -> onNavigateToSettings()
                             else -> {}
                         }
                     },

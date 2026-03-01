@@ -1,8 +1,5 @@
 package com.azzahid.hof.ui.screens.home
 
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +28,6 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,29 +45,21 @@ import com.azzahid.hof.domain.model.Route
 import com.azzahid.hof.domain.model.RouteType
 import com.azzahid.hof.domain.state.HomeUiState
 import com.azzahid.hof.domain.state.ServerStatus
-import com.azzahid.hof.ui.components.PermissionRationaleDialog
 import com.azzahid.hof.ui.components.RouteCard
 import com.azzahid.hof.ui.components.RouteDetailsDialog
-import com.azzahid.hof.ui.components.SettingsBottomSheet
 import com.azzahid.hof.ui.components.ShareDialog
 import com.azzahid.hof.ui.components.appbars.HomeAppBar
 import com.azzahid.hof.ui.providers.LocalViewModelFactory
 import com.azzahid.hof.ui.viewmodel.HomeViewModel
-import com.azzahid.hof.ui.viewmodel.SettingsViewModel
 
 
 @Composable
 fun TabHomeScreen(
     onNavigateToRouteBuilder: (String?) -> Unit
 ) {
-    val context = LocalContext.current
     val viewModelFactory = LocalViewModelFactory.current
     val homeViewModel: HomeViewModel = viewModel(factory = viewModelFactory)
-    val settingsViewModel: SettingsViewModel = viewModel(factory = viewModelFactory)
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    val settingsUiState by settingsViewModel.uiState.collectAsStateWithLifecycle()
-    val showPermissionRationale by settingsViewModel.showPermissionRationale.collectAsState()
-    var showSettingsSheet by remember { mutableStateOf(false) }
     var showShareDialog by remember { mutableStateOf(false) }
     var selectedRouteForDetails by remember { mutableStateOf<Route?>(null) }
     var selectedRouteForShare by remember { mutableStateOf<Route?>(null) }
@@ -103,15 +90,6 @@ fun TabHomeScreen(
         mutableStateOf(routeUrlPairs.firstOrNull()?.first)
     }
 
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        settingsViewModel.onPermissionResult(isGranted)
-        if (isGranted && homeUiState.serverStatus == ServerStatus.STARTED) {
-            homeViewModel.restartServerWithNewConfiguration()
-        }
-    }
-
     val snackbarHostState = remember { SnackbarHostState() }
     var previousServerStatus by remember { mutableStateOf(homeUiState.serverStatus) }
     val serverPort = homeUiState.serverPort.toIntOrNull() ?: Constants.DEFAULT_PORT
@@ -136,8 +114,7 @@ fun TabHomeScreen(
                 serverStatus = homeUiState.serverStatus,
                 serverPort = serverPort,
                 onToggleServer = homeViewModel::toggleServer,
-                onShareClick = { showShareDialog = true },
-                onSettingsClick = { showSettingsSheet = true }
+                onShareClick = { showShareDialog = true }
             )
 
             HomeScreenContent(
@@ -156,36 +133,6 @@ fun TabHomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
-        )
-    }
-
-    SettingsBottomSheet(
-        showSettingsSheet = showSettingsSheet,
-        settingsUiState = settingsUiState,
-        onUpdateAutoStart = settingsViewModel::updateAutoStart,
-        onUpdateBackgroundServiceEnabled = { enabled ->
-            settingsViewModel.updateBackgroundServiceEnabled(
-                enabled,
-                context as? ComponentActivity,
-                notificationPermissionLauncher
-            )
-        },
-        onUpdateEnableLogs = settingsViewModel::updateEnableLogs,
-        onUpdateDefaultPort = homeViewModel::updateServerPort,
-        onUpdateLogRetentionDays = settingsViewModel::updateLogRetentionDays,
-        onUpdateMaxLogEntries = settingsViewModel::updateMaxLogEntries,
-        onUpdateAutoCleanupEnabled = settingsViewModel::updateAutoCleanupEnabled,
-        onUpdateCorsAllowAnyHost = settingsViewModel::updateCorsAllowAnyHost,
-        onUpdateCorsAllowedHosts = settingsViewModel::updateCorsAllowedHosts,
-        onUpdateCorsAllowCredentials = settingsViewModel::updateCorsAllowCredentials,
-        onSaveSettings = settingsViewModel::saveSettings,
-        onDismiss = { showSettingsSheet = false }
-    )
-
-    if (showPermissionRationale) {
-        PermissionRationaleDialog(
-            onDismiss = { settingsViewModel.dismissPermissionRationale() },
-            onOpenSettings = { settingsViewModel.openAppSettings() }
         )
     }
 

@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.azzahid.hof.ui.screens.TabLogsScreen
 import com.azzahid.hof.ui.screens.home.TabHomeScreen
 import com.azzahid.hof.ui.screens.home.routes.RouteBuilderScreen
+import com.azzahid.hof.ui.screens.settings.TabSettingsScreen
 import kotlinx.serialization.Serializable
 
 
@@ -25,6 +26,9 @@ sealed class Screen {
 
     @Serializable
     data object Logs : Screen()
+
+    @Serializable
+    data object Settings : Screen()
 
     @Serializable
     data object RouteBuilder : Screen()
@@ -82,6 +86,15 @@ fun AppNavigation(
             popExitTransition = { AppAnimations.slideExitRight }
         ) {
             TabLogsScreen()
+        }
+
+        composable<Screen.Settings>(
+            enterTransition = { AppAnimations.slideEnterRight },
+            exitTransition = { AppAnimations.slideExitLeft },
+            popEnterTransition = { AppAnimations.slideEnterLeft },
+            popExitTransition = { AppAnimations.slideExitRight }
+        ) {
+            TabSettingsScreen()
         }
 
         composable<Screen.RouteBuilder>(

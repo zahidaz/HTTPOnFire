@@ -4,6 +4,7 @@
     <!-- Navigation -->
     <string name="nav_home">Home</string>
     <string name="nav_logs">Logs</string>
+    <string name="nav_settings">Settings</string>
 
     <!-- Server Status -->
 
@@ -40,6 +41,22 @@
     <string name="route_type_openapi">OPENAPI</string>
     <string name="route_type_docs">DOCS</string>
     <string name="route_type_notification">NOTIFY</string>
+    <string name="route_type_echo">ECHO</string>
+    <string name="route_type_device">DEVICE</string>
+    <string name="route_type_battery">BATTERY</string>
+    <string name="route_type_qrcode">QR CODE</string>
+    <string name="route_type_apps">APPS</string>
+    <string name="route_type_clipboard">CLIPBOARD</string>
+    <string name="route_type_volume">VOLUME</string>
+    <string name="route_type_tts">SPEAK</string>
+    <string name="route_type_wifi">WIFI</string>
+    <string name="route_type_vibrate">VIBRATE</string>
+    <string name="route_type_flashlight">FLASH</string>
+    <string name="route_type_ring">RING</string>
+    <string name="route_type_location">LOCATION</string>
+    <string name="route_type_contacts">CONTACTS</string>
+    <string name="route_type_camera">CAMERA</string>
+    <string name="route_type_dashboard">DASHBOARD</string>
 
     <!-- Route Management -->
     <string name="route_create_title">Create New Link</string>
@@ -144,6 +161,17 @@
     <string name="settings_allow_credentials">Allow login credentials</string>
     <string name="settings_allow_credentials_desc">Allow websites to send login information and cookies</string>
     <string name="settings_saving">Saving…</string>
+    <string name="settings_permissions">Permissions</string>
+    <string name="settings_permissions_desc">Some features need your permission to work</string>
+    <string name="settings_permission_location">Location</string>
+    <string name="settings_permission_location_desc">Required for GPS location sharing</string>
+    <string name="settings_permission_contacts">Contacts</string>
+    <string name="settings_permission_contacts_desc">Required for reading device contacts</string>
+    <string name="settings_permission_camera">Camera</string>
+    <string name="settings_permission_camera_desc">Required for photo capture</string>
+    <string name="settings_permission_granted">Granted</string>
+    <string name="settings_permission_not_granted">Not granted</string>
+    <string name="settings_permission_grant">Grant</string>
 
     <!-- Dialogs -->
     <string name="dialog_welcome_title">Welcome to HTTP on Fire!</string>

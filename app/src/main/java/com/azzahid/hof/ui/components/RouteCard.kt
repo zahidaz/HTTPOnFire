@@ -160,6 +160,118 @@ fun RouteCard(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         }
+
+                        is RouteType.EchoRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_echo),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.DeviceInfoRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_device),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.BatteryRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_battery),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.QrCodeRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_qrcode),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.AppListRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_apps),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.ClipboardRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_clipboard),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.VolumeRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_volume),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.TtsRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_tts),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.WifiInfoRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_wifi),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.VibrateRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_vibrate),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.FlashlightRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_flashlight),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.RingRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_ring),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.LocationRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_location),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+
+                        is RouteType.ContactsRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_contacts),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+
+                        is RouteType.CameraRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_camera),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+
+                        is RouteType.DashboardRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_dashboard),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
                     }
 
                     Text(
