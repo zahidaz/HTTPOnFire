@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="docs/app_icon.png" alt="HTTP on Fire" width="120">
-
 # HTTP on Fire
 
 **Turn your Android phone into a powerful web server & remote control panel.**
@@ -10,10 +8,6 @@
 [![Jetpack Compose](https://img.shields.io/badge/Compose-0D0D0F?style=for-the-badge&logo=jetpackcompose&logoColor=00D4AA)](https://developer.android.com/jetpack/compose)
 [![Ktor](https://img.shields.io/badge/Ktor-0D0D0F?style=for-the-badge&logo=ktor&logoColor=A78BFA)](https://ktor.io)
 [![License](https://img.shields.io/badge/Apache_2.0-0D0D0F?style=for-the-badge)](LICENSE)
-
-<br>
-
-<img src="docs/hof.gif" alt="HTTP on Fire Demo" width="700">
 
 </div>
 
