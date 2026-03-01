@@ -62,10 +62,11 @@ sealed class RouteType {
     data class Directory(
         val directoryUri: String,
         val allowBrowsing: Boolean = true,
-        val indexFile: String? = "index.html"
+        val indexFile: String? = "index.html",
+        val allowUpload: Boolean = false
     ) : RouteType() {
         override fun handler(route: Route): ServerRoute.() -> Unit = {
-            addDirectory(route, directoryUri.toUri(), allowBrowsing, indexFile)
+            addDirectory(route, directoryUri.toUri(), allowBrowsing, indexFile, allowUpload)
         }
     }
 

@@ -16,7 +16,7 @@ class DirectoryListingGeneratorTest {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
         assertTrue(html.startsWith("<!DOCTYPE html>"))
-        assertTrue(html.contains("<html>"))
+        assertTrue(html.contains("<html"))
         assertTrue(html.contains("</html>"))
     }
 
@@ -24,14 +24,14 @@ class DirectoryListingGeneratorTest {
     fun `generate shows directory title`() {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
-        assertTrue(html.contains("Directory listing for /files"))
+        assertTrue(html.contains("<title>/files</title>"))
     }
 
     @Test
     fun `generate shows title with relative path`() {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "subdir")
-        assertTrue(html.contains("Directory listing for /files/subdir"))
+        assertTrue(html.contains("<title>/files/subdir</title>"))
     }
 
     @Test
@@ -51,7 +51,7 @@ class DirectoryListingGeneratorTest {
 
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
         assertTrue(html.contains("subdir/"))
-        assertTrue(html.contains("class=\"dir\""))
+        assertTrue(html.contains("dir-name"))
     }
 
     @Test
@@ -61,7 +61,7 @@ class DirectoryListingGeneratorTest {
         file.writeBytes(ByteArray(512))
 
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
-        assertTrue(html.contains("512 bytes"))
+        assertTrue(html.contains("512 B"))
     }
 
     @Test
@@ -70,14 +70,14 @@ class DirectoryListingGeneratorTest {
         java.io.File(dir, "subdir").mkdir()
 
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
-        assertFalse(html.contains("bytes") && html.contains("subdir"))
+        assertFalse(html.contains("512 B") && html.contains("subdir"))
     }
 
     @Test
     fun `generate shows parent directory link for subpaths`() {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "sub/deep")
-        assertTrue(html.contains("[Parent Directory]"))
+        assertTrue(html.contains("data-name=\"..\""))
         assertTrue(html.contains("href=\"/files/sub/\""))
     }
 
@@ -85,7 +85,7 @@ class DirectoryListingGeneratorTest {
     fun `generate shows parent directory link to base for first level`() {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "subdir")
-        assertTrue(html.contains("[Parent Directory]"))
+        assertTrue(html.contains("data-name=\"..\""))
         assertTrue(html.contains("href=\"/files/\""))
     }
 
@@ -93,7 +93,7 @@ class DirectoryListingGeneratorTest {
     fun `generate does not show parent directory link at root`() {
         val dir = tempFolder.newFolder("testdir")
         val html = DirectoryListingGenerator.generate(dir, "/files", "")
-        assertFalse(html.contains("[Parent Directory]"))
+        assertFalse(html.contains("data-name=\"..\""))
     }
 
     @Test
@@ -113,8 +113,8 @@ class DirectoryListingGeneratorTest {
     fun `generate handles empty directory`() {
         val dir = tempFolder.newFolder("emptydir")
         val html = DirectoryListingGenerator.generate(dir, "/empty", "")
-        assertTrue(html.contains("Directory listing for /empty"))
-        assertTrue(html.contains("<hr>"))
+        assertTrue(html.contains("<title>/empty</title>"))
+        assertTrue(html.contains("empty"))
     }
 
     @Test

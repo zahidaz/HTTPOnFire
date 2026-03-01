@@ -316,6 +316,12 @@ private fun DirectoryConfigSection(type: RouteType.Directory) {
                     R.string.details_no
                 )
             )
+            DetailRow(
+                label = stringResource(R.string.details_allow_upload),
+                value = if (type.allowUpload) stringResource(R.string.details_yes) else stringResource(
+                    R.string.details_no
+                )
+            )
             type.indexFile?.let {
                 DetailRow(label = stringResource(R.string.details_index_file), value = it)
             }

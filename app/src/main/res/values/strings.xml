@@ -62,6 +62,8 @@
     <string name="filesystem_directory_options">Folder Settings</string>
     <string name="filesystem_respect_index">Show homepage files</string>
     <string name="filesystem_respect_index_desc">Automatically send index.html file when someone visits a folder</string>
+    <string name="filesystem_allow_upload">Allow file uploads</string>
+    <string name="filesystem_allow_upload_desc">Visitors can upload files to this folder</string>
 
     <!-- API Route Builder -->
     <string name="api_basic_info">Basic Information</string>
@@ -177,6 +179,7 @@
     <string name="details_directory_path">Directory Path</string>
     <string name="details_allow_browsing">Allow Browsing</string>
     <string name="details_index_file">Index File</string>
+    <string name="details_allow_upload">Allow uploads</string>
     <string name="details_redirect_config">Redirect Configuration</string>
     <string name="details_target_url">Target URL</string>
     <string name="details_permanent">Permanent</string>

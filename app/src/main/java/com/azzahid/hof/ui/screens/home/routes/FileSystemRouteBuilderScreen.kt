@@ -151,6 +151,11 @@ internal fun FileSystemRouteBuilderContent(
                 respectIndexHtml = uiState.respectIndexHtml,
                 onToggle = { viewModel.updateRespectIndexHtml(!uiState.respectIndexHtml) }
             )
+
+            UploadOptionCard(
+                allowUpload = uiState.allowUpload,
+                onToggle = { viewModel.updateAllowUpload(!uiState.allowUpload) }
+            )
         }
     }
 }
@@ -321,6 +326,42 @@ private fun IndexHtmlOptionCard(
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun UploadOptionCard(
+    allowUpload: Boolean,
+    onToggle: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            Switch(
+                checked = allowUpload,
+                onCheckedChange = { onToggle() }
+            )
+
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.filesystem_allow_upload),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Text(
+                    text = stringResource(R.string.filesystem_allow_upload_desc),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

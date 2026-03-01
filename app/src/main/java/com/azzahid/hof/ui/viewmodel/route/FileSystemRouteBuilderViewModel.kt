@@ -43,6 +43,10 @@ class FileSystemRouteBuilderViewModel(
         _uiState.value = _uiState.value.copy(respectIndexHtml = respect)
     }
 
+    fun updateAllowUpload(allow: Boolean) {
+        _uiState.value = _uiState.value.copy(allowUpload = allow)
+    }
+
     fun addSelectedFile(uri: Uri) {
         val newSelection = filePermissionService.processSelectedFiles(listOf(uri)).firstOrNull()
         newSelection?.let { file ->
@@ -103,7 +107,8 @@ class FileSystemRouteBuilderViewModel(
                 type = if (selectedFile.isDirectory) {
                     RouteType.Directory(
                         directoryUri = selectedFile.uri.toString(),
-                        indexFile = if (state.respectIndexHtml) "index.html" else null
+                        indexFile = if (state.respectIndexHtml) "index.html" else null,
+                        allowUpload = state.allowUpload
                     )
                 } else {
                     RouteType.StaticFile(fileUri = selectedFile.uri.toString())

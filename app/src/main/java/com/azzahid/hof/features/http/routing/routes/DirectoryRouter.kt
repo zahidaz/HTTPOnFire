@@ -7,20 +7,27 @@ import com.azzahid.hof.features.http.androidContext
 import com.azzahid.hof.features.http.utils.DirectoryListingGenerator
 import com.azzahid.hof.features.http.utils.FileServingUtils
 import io.github.smiley4.ktoropenapi.get
+import io.github.smiley4.ktoropenapi.post
 import io.github.smiley4.ktoropenapi.route
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
+import io.ktor.server.request.receiveMultipart
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondRedirect
 import io.ktor.server.response.respondText
+import io.ktor.utils.io.readRemaining
+import kotlinx.io.readByteArray
 
 internal fun io.ktor.server.routing.Route.addDirectory(
     route: Route,
     baseUri: Uri,
     allowBrowsing: Boolean,
-    indexFile: String?
+    indexFile: String?,
+    allowUpload: Boolean = false
 ) {
     route(route.path, {
         description = route.description
@@ -68,7 +75,8 @@ internal fun io.ktor.server.routing.Route.addDirectory(
                             val listing = DirectoryListingGenerator.generateFromDocumentFile(
                                 targetFile,
                                 route.path,
-                                relativePath
+                                relativePath,
+                                allowUpload
                             )
                             call.response.headers.append(
                                 HttpHeaders.CacheControl,
@@ -85,6 +93,75 @@ internal fun io.ktor.server.routing.Route.addDirectory(
                     HttpStatusCode.InternalServerError,
                     "Error accessing path: ${e.message}"
                 )
+            }
+        }
+
+        if (allowUpload) {
+            post("/{path...}") {
+                val context = call.application.androidContext
+                val relativePath = call.parameters.getAll("path")?.joinToString("/") ?: ""
+
+                try {
+                    val baseDocumentFile = DocumentFile.fromTreeUri(context, baseUri)
+                    if (baseDocumentFile == null || !baseDocumentFile.exists()) {
+                        call.respondText(
+                            """{"success":false,"error":"Directory not found"}""",
+                            ContentType.Application.Json,
+                            HttpStatusCode.NotFound
+                        )
+                        return@post
+                    }
+
+                    val targetDir = if (relativePath.isEmpty()) {
+                        baseDocumentFile
+                    } else {
+                        relativePath.split("/")
+                            .fold(baseDocumentFile as DocumentFile?) { current, segment ->
+                                current?.findFile(segment)
+                            }
+                    }
+
+                    if (targetDir == null || !targetDir.exists() || !targetDir.isDirectory) {
+                        call.respondText(
+                            """{"success":false,"error":"Target directory not found"}""",
+                            ContentType.Application.Json,
+                            HttpStatusCode.NotFound
+                        )
+                        return@post
+                    }
+
+                    val uploadedFiles = mutableListOf<String>()
+                    val multipart = call.receiveMultipart()
+
+                    multipart.forEachPart { part ->
+                        if (part is PartData.FileItem) {
+                            val fileName = part.originalFileName ?: "upload"
+                            val mimeType = part.contentType?.toString() ?: "application/octet-stream"
+                            val newFile = targetDir.createFile(mimeType, fileName)
+
+                            if (newFile != null) {
+                                val bytes = part.provider().readRemaining().readByteArray()
+                                context.contentResolver.openOutputStream(newFile.uri)?.use { output ->
+                                    output.write(bytes)
+                                }
+                                uploadedFiles.add(fileName)
+                            }
+                        }
+                        part.dispose()
+                    }
+
+                    val filesJson = uploadedFiles.joinToString(",") { "\"$it\"" }
+                    call.respondText(
+                        """{"success":true,"files":[$filesJson]}""",
+                        ContentType.Application.Json
+                    )
+                } catch (e: Exception) {
+                    call.respondText(
+                        """{"success":false,"error":"Upload failed: ${e.message}"}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.InternalServerError
+                    )
+                }
             }
         }
 
