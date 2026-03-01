@@ -413,6 +413,11 @@ private fun PermissionsCard() {
                 Manifest.permission.CAMERA,
                 R.string.settings_permission_camera,
                 R.string.settings_permission_camera_desc
+            ),
+            PermissionItem(
+                Manifest.permission.RECORD_AUDIO,
+                R.string.settings_permission_microphone,
+                R.string.settings_permission_microphone_desc
             )
         )
     }

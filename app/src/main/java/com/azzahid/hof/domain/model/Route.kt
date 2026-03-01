@@ -6,7 +6,9 @@ import com.azzahid.hof.features.http.routing.routes.addApi
 import com.azzahid.hof.features.http.routing.routes.addDirectory
 import com.azzahid.hof.features.http.routing.routes.addRedirect
 import com.azzahid.hof.features.http.routing.routes.addStaticFile
+import com.azzahid.hof.features.http.routing.routes.builtin.addAppLaunchRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addAppListRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addAppStopRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addBatteryRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addCameraRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addDashboardRoute
@@ -16,6 +18,7 @@ import com.azzahid.hof.features.http.routing.routes.builtin.addDeviceInfoRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addEchoRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addFlashlightRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addLocationRoute
+import com.azzahid.hof.features.http.routing.routes.builtin.addMicrophoneRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addNotificationRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addOpenApiRoute
 import com.azzahid.hof.features.http.routing.routes.builtin.addProxyRoute
@@ -235,6 +238,27 @@ sealed class RouteType {
     object CameraRoute : BuiltInRoute() {
         override fun handler(route: Route): ServerRoute.() -> Unit = {
             addCameraRoute(route)
+        }
+    }
+
+    @Serializable
+    object MicrophoneRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addMicrophoneRoute(route)
+        }
+    }
+
+    @Serializable
+    object AppLaunchRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addAppLaunchRoute(route)
+        }
+    }
+
+    @Serializable
+    object AppStopRoute : BuiltInRoute() {
+        override fun handler(route: Route): ServerRoute.() -> Unit = {
+            addAppStopRoute(route)
         }
     }
 

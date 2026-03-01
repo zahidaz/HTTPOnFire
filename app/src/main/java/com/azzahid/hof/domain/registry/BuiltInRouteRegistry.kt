@@ -188,13 +188,40 @@ object BuiltInRouteRegistry {
             order = -981
         ),
         Route(
+            id = "built-in-microphone",
+            path = "/api/mic/stream",
+            method = HttpMethod.Get,
+            description = "Stream live audio from the device microphone",
+            type = RouteType.MicrophoneRoute,
+            isEnabled = true,
+            order = -979
+        ),
+        Route(
+            id = "built-in-app-launch",
+            path = "/api/apps/launch",
+            method = HttpMethod.Post,
+            description = "Launch an installed app by package name",
+            type = RouteType.AppLaunchRoute,
+            isEnabled = true,
+            order = -978
+        ),
+        Route(
+            id = "built-in-app-stop",
+            path = "/api/apps/stop",
+            method = HttpMethod.Post,
+            description = "Stop background processes of an app by package name",
+            type = RouteType.AppStopRoute,
+            isEnabled = true,
+            order = -977
+        ),
+        Route(
             id = "built-in-dashboard",
             path = "/api/dashboard",
             method = HttpMethod.Get,
             description = "Interactive control panel for all device features",
             type = RouteType.DashboardRoute,
             isEnabled = true,
-            order = -980
+            order = -976
         )
     )
 

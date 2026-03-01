@@ -266,6 +266,27 @@ fun RouteCard(
                             )
                         }
 
+                        is RouteType.MicrophoneRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_microphone),
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
+
+                        is RouteType.AppLaunchRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_app_launch),
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+
+                        is RouteType.AppStopRoute -> {
+                            TypeChip(
+                                text = stringResource(R.string.route_type_app_stop),
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+
                         is RouteType.DashboardRoute -> {
                             TypeChip(
                                 text = stringResource(R.string.route_type_dashboard),

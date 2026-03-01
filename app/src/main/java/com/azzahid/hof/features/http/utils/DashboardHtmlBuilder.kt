@@ -146,6 +146,17 @@ main{max-width:1200px;margin:0 auto;padding:24px}
 <div class="card"><h3>Clipboard</h3>
 <div class="clip-current" id="clipText">Loading...</div>
 <div class="inline-input"><input type="text" id="clipInput" placeholder="New clipboard text" style="flex:1"><button class="btn" onclick="setClipboard()">Set</button></div></div>
+
+<div class="card"><h3>Microphone<span class="perm-badge">Permission Required</span></h3>
+<div class="inline-input"><button class="btn btn-red" id="micBtn" onclick="toggleMic()">Listen</button></div>
+<audio id="micAudio" style="width:100%;margin-top:12px;display:none" controls></audio></div>
+
+<div class="card"><h3>Notification</h3>
+<div class="inline-input" style="margin-top:0"><input type="text" id="notifTitle" placeholder="Title" style="flex:1"></div>
+<div class="text-area-wrap" style="margin-top:8px"><textarea id="notifBody" placeholder="Message body..."></textarea></div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<select id="notifPriority" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-size:13px"><option value="DEFAULT">Default</option><option value="LOW">Low</option><option value="HIGH">High</option><option value="MAX">Max</option></select>
+<button class="btn btn-amber" onclick="doNotify()">Send</button></div></div>
 </div></div>
 
 <div class="section"><div class="section-title">Tools</div>
@@ -370,13 +381,47 @@ renderApps(allApps)}).catch(function(e){el.innerHTML='<span style="color:var(--r
 function renderApps(list){
 if(!list.length){document.getElementById('appsList').innerHTML='<div class="item" style="color:var(--muted)">No apps found</div>';return}
 var h='';
-for(var i=0;i<list.length;i++){h+='<div class="item"><div class="name">'+esc(list[i].name)+'</div><div class="pkg">'+esc(list[i].packageName)+'</div></div>'}
+for(var i=0;i<list.length;i++){h+='<div class="item" style="display:flex;align-items:center;gap:8px"><div style="flex:1"><div class="name">'+esc(list[i].name)+'</div><div class="pkg">'+esc(list[i].packageName)+'</div></div><button class="btn" style="padding:4px 8px;font-size:11px" data-pkg="'+esc(list[i].packageName)+'" onclick="launchApp(this.dataset.pkg)">Launch</button><button class="btn btn-red" style="padding:4px 8px;font-size:11px" data-pkg="'+esc(list[i].packageName)+'" onclick="stopApp(this.dataset.pkg)">Stop</button></div>'}
 document.getElementById('appsList').innerHTML=h}
 function filterApps(q){
 q=q.toLowerCase();
 renderApps(allApps.filter(function(a){return a.name.toLowerCase().indexOf(q)!==-1||a.packageName.toLowerCase().indexOf(q)!==-1}))}
 
 function esc(s){if(!s)return'';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+var micActive=false;
+function toggleMic(){
+var btn=document.getElementById('micBtn');
+var audio=document.getElementById('micAudio');
+if(!micActive){
+audio.src=B+'/api/mic/stream';
+audio.style.display='block';
+audio.play().catch(function(e){toast('Playback failed: '+e.message,false)});
+btn.textContent='Stop';btn.classList.add('btn-amber');btn.classList.remove('btn-red');
+micActive=true;
+}else{
+audio.pause();audio.removeAttribute('src');audio.load();
+audio.style.display='none';
+btn.textContent='Listen';btn.classList.remove('btn-amber');btn.classList.add('btn-red');
+micActive=false}}
+
+function launchApp(pkg){
+api('/api/apps/launch?package='+encodeURIComponent(pkg),{method:'POST'}).then(function(){
+toast('Launched '+pkg,true)}).catch(function(e){toast(e.message,false)})}
+
+function stopApp(pkg){
+api('/api/apps/stop?package='+encodeURIComponent(pkg),{method:'POST'}).then(function(){
+toast('Stopped '+pkg,true)}).catch(function(e){toast(e.message,false)})}
+
+function doNotify(){
+var title=document.getElementById('notifTitle').value.trim();
+var body=document.getElementById('notifBody').value.trim();
+if(!title||!body){toast('Title and message are required',false);return}
+var priority=document.getElementById('notifPriority').value;
+api('/api/notify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title,body:body,priority:priority})}).then(function(){
+document.getElementById('notifTitle').value='';
+document.getElementById('notifBody').value='';
+toast('Notification sent',true)}).catch(function(e){toast(e.message,false)})}
 
 function loadAll(){loadBattery();loadWifi();loadDevice();loadVolume();loadClipboard()}
 loadAll();

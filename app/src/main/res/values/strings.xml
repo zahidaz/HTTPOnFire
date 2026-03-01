@@ -57,6 +57,9 @@
     <string name="route_type_contacts">CONTACTS</string>
     <string name="route_type_camera">CAMERA</string>
     <string name="route_type_dashboard">DASHBOARD</string>
+    <string name="route_type_microphone">MIC</string>
+    <string name="route_type_app_launch">LAUNCH</string>
+    <string name="route_type_app_stop">STOP</string>
 
     <!-- Route Management -->
     <string name="route_create_title">Create New Link</string>
@@ -169,6 +172,8 @@
     <string name="settings_permission_contacts_desc">Required for reading device contacts</string>
     <string name="settings_permission_camera">Camera</string>
     <string name="settings_permission_camera_desc">Required for photo capture</string>
+    <string name="settings_permission_microphone">Microphone</string>
+    <string name="settings_permission_microphone_desc">Required for live audio streaming</string>
     <string name="settings_permission_granted">Granted</string>
     <string name="settings_permission_not_granted">Not granted</string>
     <string name="settings_permission_grant">Grant</string>
