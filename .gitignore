@@ -90,5 +90,4 @@ tmp/
 *.hprof
 
 # Miscellaneous
-*.json (exclude if not project-specific)
 output-metadata.json
