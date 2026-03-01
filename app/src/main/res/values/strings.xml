@@ -53,8 +53,8 @@
     <!-- File System Route Builder -->
     <string name="filesystem_select_what_to_share">Choose what to share</string>
     <string name="filesystem_instruction">Pick a file or folder from your device to share</string>
-    <string name="filesystem_select_file">Choose File</string>
-    <string name="filesystem_select_folder">Choose Folder</string>
+    <string name="filesystem_select_file">File</string>
+    <string name="filesystem_select_folder">Folder</string>
     <string name="filesystem_sharing_file">Sharing file</string>
     <string name="filesystem_sharing_folder">Sharing folder</string>
     <string name="filesystem_share_as">Share as: </string>
@@ -175,8 +175,8 @@
     <string name="details_file_config">File Configuration</string>
     <string name="details_file_path">File Path</string>
     <string name="details_mime_type">MIME Type</string>
-    <string name="details_directory_config">Directory Configuration</string>
-    <string name="details_directory_path">Directory Path</string>
+    <string name="details_directory_config">Folder Configuration</string>
+    <string name="details_directory_path">Folder Path</string>
     <string name="details_allow_browsing">Allow Browsing</string>
     <string name="details_index_file">Index File</string>
     <string name="details_allow_upload">Allow uploads</string>
