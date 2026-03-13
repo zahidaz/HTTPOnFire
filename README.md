@@ -158,28 +158,28 @@ Want to go further? Share files, host a website, create custom API endpoints, or
 
 ## Quick Start
 
-The server runs on port **43567** by default. Replace `<phone-ip>` with your device's local IP.
+The server runs on port **8080** by default. Replace `<phone-ip>` with your device's local IP.
 
 ```bash
 # Open the dashboard
-open http://<phone-ip>:43567/api/dashboard
+open http://<phone-ip>:8080/api/dashboard
 
 # Toggle flashlight
-curl -X POST "http://<phone-ip>:43567/api/flashlight?enable=true"
+curl -X POST "http://<phone-ip>:8080/api/flashlight?enable=true"
 
 # Send a notification
-curl -X POST http://<phone-ip>:43567/api/notify \
+curl -X POST http://<phone-ip>:8080/api/notify \
   -H "Content-Type: application/json" \
   -d '{"title":"Hello","body":"From my laptop!"}'
 
 # Capture a photo
-curl -X POST "http://<phone-ip>:43567/api/camera?facing=back" -o photo.jpg
+curl -X POST "http://<phone-ip>:8080/api/camera?facing=back" -o photo.jpg
 
 # Listen to live microphone
-open "http://<phone-ip>:43567/api/mic/stream"
+open "http://<phone-ip>:8080/api/mic/stream"
 ```
 
-> **Using an emulator?** Run `adb forward tcp:43567 tcp:43567` then use `localhost`.
+> **Using an emulator?** Run `adb forward tcp:8080 tcp:8080` then use `localhost`.
 
 <br>
 
