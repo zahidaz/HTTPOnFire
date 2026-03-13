@@ -24,9 +24,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ExpandLess
 import androidx.compose.material.icons.outlined.ExpandMore
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -73,12 +73,31 @@ fun TabSettingsScreen() {
         settingsViewModel.onPermissionResult(isGranted)
     }
 
+    val saveEnabled = !settingsUiState.isLoading &&
+            (settingsUiState.defaultPort.toIntOrNull()?.let { it in 1..65535 } ?: false) &&
+            (!settingsUiState.enableLogs ||
+                    (settingsUiState.logRetentionDays.toIntOrNull()?.let { it in 1..365 } ?: false)) &&
+            (!settingsUiState.enableLogs ||
+                    (settingsUiState.maxLogEntries.toIntOrNull()?.let { it in 100..100000 } ?: false))
+
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(R.string.settings_title)) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.background
-            )
+            ),
+            actions = {
+                FilledTonalButton(
+                    onClick = settingsViewModel::saveSettings,
+                    enabled = saveEnabled,
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    Text(
+                        if (settingsUiState.isLoading) stringResource(R.string.settings_saving)
+                        else stringResource(R.string.action_save)
+                    )
+                }
+            }
         )
 
         SettingsContent(
@@ -98,8 +117,7 @@ fun TabSettingsScreen() {
             onUpdateAutoCleanupEnabled = settingsViewModel::updateAutoCleanupEnabled,
             onUpdateCorsAllowAnyHost = settingsViewModel::updateCorsAllowAnyHost,
             onUpdateCorsAllowedHosts = settingsViewModel::updateCorsAllowedHosts,
-            onUpdateCorsAllowCredentials = settingsViewModel::updateCorsAllowCredentials,
-            onSaveSettings = settingsViewModel::saveSettings
+            onUpdateCorsAllowCredentials = settingsViewModel::updateCorsAllowCredentials
         )
     }
 }
@@ -116,8 +134,7 @@ private fun SettingsContent(
     onUpdateAutoCleanupEnabled: (Boolean) -> Unit,
     onUpdateCorsAllowAnyHost: (Boolean) -> Unit,
     onUpdateCorsAllowedHosts: (String) -> Unit,
-    onUpdateCorsAllowCredentials: (Boolean) -> Unit,
-    onSaveSettings: () -> Unit
+    onUpdateCorsAllowCredentials: (Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -152,25 +169,6 @@ private fun SettingsContent(
         )
 
         PermissionsCard()
-
-        Button(
-            onClick = onSaveSettings,
-            enabled = !settingsUiState.isLoading &&
-                    (settingsUiState.defaultPort.toIntOrNull()?.let { it in 1..65535 } ?: false) &&
-                    (!settingsUiState.enableLogs ||
-                            (settingsUiState.logRetentionDays.toIntOrNull()?.let { it in 1..365 }
-                                ?: false)) &&
-                    (!settingsUiState.enableLogs ||
-                            (settingsUiState.maxLogEntries.toIntOrNull()?.let { it in 100..100000 }
-                                ?: false)),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if (settingsUiState.isLoading) {
-                Text(stringResource(R.string.settings_saving))
-            } else {
-                Text(stringResource(R.string.action_save))
-            }
-        }
     }
 }
 
@@ -194,7 +192,8 @@ private fun ServerConfigCard(
                 value = settingsUiState.defaultPort,
                 onValueChange = { port ->
                     if (port.all { it.isDigit() } && port.length <= 5) {
-                        onUpdateDefaultPort(port)
+                        val normalized = port.trimStart('0').ifEmpty { if (port.isNotEmpty()) "0" else "" }
+                        onUpdateDefaultPort(normalized)
                     }
                 },
                 label = { Text(stringResource(R.string.settings_default_port)) },
