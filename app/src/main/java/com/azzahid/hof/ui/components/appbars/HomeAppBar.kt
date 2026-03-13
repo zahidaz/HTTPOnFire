@@ -30,7 +30,7 @@ import com.azzahid.hof.domain.state.ServerStatus
 @Composable
 fun HomeAppBar(
     serverStatus: ServerStatus,
-    serverPort: Int,
+    serverUrl: String?,
     onToggleServer: () -> Unit,
     onShareClick: () -> Unit
 ) {
@@ -66,9 +66,9 @@ fun HomeAppBar(
                         },
                         style = MaterialTheme.typography.titleLarge
                     )
-                    if (serverStatus == ServerStatus.STARTED) {
+                    if (serverStatus == ServerStatus.STARTED && serverUrl != null) {
                         Text(
-                            text = stringResource(R.string.server_url_localhost, serverPort),
+                            text = serverUrl.removePrefix("http://"),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

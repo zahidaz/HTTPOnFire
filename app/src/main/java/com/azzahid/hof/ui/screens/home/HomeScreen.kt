@@ -112,7 +112,7 @@ fun TabHomeScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             HomeAppBar(
                 serverStatus = homeUiState.serverStatus,
-                serverPort = serverPort,
+                serverUrl = homeUiState.serverUrl,
                 onToggleServer = homeViewModel::toggleServer,
                 onShareClick = { showShareDialog = true }
             )

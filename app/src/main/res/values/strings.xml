@@ -13,7 +13,7 @@
     <string name="server_status_starting">Starting…</string>
     <string name="server_status_stopping">Stopping…</string>
     <string name="server_status_error">Error</string>
-    <string name="server_url_localhost">localhost:%d</string>
+
 
     <!-- Common Actions -->
     <string name="action_save">Save</string>
