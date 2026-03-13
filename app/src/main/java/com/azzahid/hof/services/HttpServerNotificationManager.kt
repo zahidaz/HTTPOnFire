@@ -89,7 +89,7 @@ class HttpServerNotificationManager(
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val notification = NotificationCompat.Builder(service, channelId)
+        val builder = NotificationCompat.Builder(service, channelId)
             .setContentTitle("HTTP on Fire")
             .setContentText(message)
             .setSmallIcon(R.drawable.ic_notification_server)
@@ -99,7 +99,19 @@ class HttpServerNotificationManager(
             .setAutoCancel(!isServerRunning)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .build()
+
+        if (isServerRunning) {
+            val stopIntent = Intent(service, HttpServerService::class.java).apply {
+                action = HttpServerService.ACTION_STOP_SERVER
+            }
+            val stopPendingIntent = PendingIntent.getService(
+                service, 1, stopIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            builder.addAction(0, "Stop Server", stopPendingIntent)
+        }
+
+        val notification = builder.build()
 
         try {
             if (isServerRunning) {

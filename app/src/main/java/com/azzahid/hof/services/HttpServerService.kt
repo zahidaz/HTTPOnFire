@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import android.util.Log
+import com.azzahid.hof.Constants
 import com.azzahid.hof.data.database.AppDatabase
 import com.azzahid.hof.data.repository.AndroidNetworkRepository
 import com.azzahid.hof.data.repository.HttpRequestLogRepository
@@ -24,6 +25,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -44,6 +46,7 @@ class HttpServerService : Service() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO + handler)
 
     private lateinit var serverConfig: ServerConfigurationService
+    private lateinit var settingsRepo: SettingsRepository
     private lateinit var notificationMgr: HttpServerNotificationManager
     private lateinit var networkRepo: AndroidNetworkRepository
 
@@ -65,10 +68,10 @@ class HttpServerService : Service() {
         networkRepo = AndroidNetworkRepository()
 
         val db = AppDatabase.getDatabase(this)
-        val settings = SettingsRepository(this)
+        settingsRepo = SettingsRepository(this)
         serverConfig = ServerConfigurationService(
-            settings,
-            RouteRepository(db.RouteDao(), settings),
+            settingsRepo,
+            RouteRepository(db.RouteDao(), settingsRepo),
             HttpRequestLogRepository(db.httpRequestLogDao())
         )
     }
@@ -103,8 +106,9 @@ class HttpServerService : Service() {
         }
 
         _serverStatus.value = ServerStatus.STARTING
+        val port = settingsRepo.defaultPort.first().toIntOrNull() ?: Constants.DEFAULT_PORT
         val newServer = serverConfig.buildConfiguredServer(this@HttpServerService).apply {
-            setupServerMonitoring()
+            setupServerMonitoring(port)
         }
         server = newServer
 
@@ -118,11 +122,11 @@ class HttpServerService : Service() {
         }
     }
 
-    private fun CIOEmbeddedServer.setupServerMonitoring() {
+    private fun CIOEmbeddedServer.setupServerMonitoring(port: Int) {
         monitor.subscribe(ApplicationStarted) {
             _serverStatus.value = ServerStatus.STARTED
             val ipAddress = networkRepo.getLocalIpAddress()
-            val msg = "Server started on http://$ipAddress:port"
+            val msg = "Running on http://$ipAddress:$port"
             notificationMgr.showNotification(msg, true)
             Log.i(TAG, msg)
         }
