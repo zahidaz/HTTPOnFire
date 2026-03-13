@@ -4,6 +4,8 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
@@ -34,25 +36,29 @@ sealed class Screen {
     data object RouteBuilder : Screen()
 }
 
+private const val TAB_ANIM_DURATION = 200
+private const val PUSH_ANIM_DURATION = 350
+
 object AppAnimations {
-    val slideEnterRight: EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> fullWidth },
-        animationSpec = tween(500, easing = FastOutSlowInEasing)
-    )
+    val tabEnter: EnterTransition = fadeIn(animationSpec = tween(TAB_ANIM_DURATION))
+    val tabExit: ExitTransition = fadeOut(animationSpec = tween(TAB_ANIM_DURATION))
 
-    val slideExitLeft: ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> -fullWidth },
-        animationSpec = tween(500, easing = FastOutSlowInEasing)
+    val pushEnter: EnterTransition = slideInHorizontally(
+        initialOffsetX = { it },
+        animationSpec = tween(PUSH_ANIM_DURATION, easing = FastOutSlowInEasing)
     )
+    val pushExit: ExitTransition = slideOutHorizontally(
+        targetOffsetX = { -it / 3 },
+        animationSpec = tween(PUSH_ANIM_DURATION, easing = FastOutSlowInEasing)
+    ) + fadeOut(animationSpec = tween(PUSH_ANIM_DURATION))
 
-    val slideEnterLeft: EnterTransition = slideInHorizontally(
-        initialOffsetX = { fullWidth -> -fullWidth },
-        animationSpec = tween(500, easing = FastOutSlowInEasing)
-    )
-
-    val slideExitRight: ExitTransition = slideOutHorizontally(
-        targetOffsetX = { fullWidth -> fullWidth },
-        animationSpec = tween(500, easing = FastOutSlowInEasing)
+    val popEnter: EnterTransition = slideInHorizontally(
+        initialOffsetX = { -it / 3 },
+        animationSpec = tween(PUSH_ANIM_DURATION, easing = FastOutSlowInEasing)
+    ) + fadeIn(animationSpec = tween(PUSH_ANIM_DURATION))
+    val popExit: ExitTransition = slideOutHorizontally(
+        targetOffsetX = { it },
+        animationSpec = tween(PUSH_ANIM_DURATION, easing = FastOutSlowInEasing)
     )
 }
 
@@ -67,10 +73,19 @@ fun AppNavigation(
         modifier = modifier
     ) {
         composable<Screen.Home>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
+            enterTransition = {
+                if (initialState.destination.route == Screen.RouteBuilder::class.qualifiedName)
+                    AppAnimations.popEnter else AppAnimations.tabEnter
+            },
+            exitTransition = {
+                if (targetState.destination.route == Screen.RouteBuilder::class.qualifiedName)
+                    AppAnimations.pushExit else AppAnimations.tabExit
+            },
+            popEnterTransition = {
+                if (initialState.destination.route == Screen.RouteBuilder::class.qualifiedName)
+                    AppAnimations.popEnter else AppAnimations.tabEnter
+            },
+            popExitTransition = { AppAnimations.tabExit }
         ) {
             TabHomeScreen(
                 onNavigateToRouteBuilder = {
@@ -80,28 +95,28 @@ fun AppNavigation(
         }
 
         composable<Screen.Logs>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
+            enterTransition = { AppAnimations.tabEnter },
+            exitTransition = { AppAnimations.tabExit },
+            popEnterTransition = { AppAnimations.tabEnter },
+            popExitTransition = { AppAnimations.tabExit }
         ) {
             TabLogsScreen()
         }
 
         composable<Screen.Settings>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
+            enterTransition = { AppAnimations.tabEnter },
+            exitTransition = { AppAnimations.tabExit },
+            popEnterTransition = { AppAnimations.tabEnter },
+            popExitTransition = { AppAnimations.tabExit }
         ) {
             TabSettingsScreen()
         }
 
         composable<Screen.RouteBuilder>(
-            enterTransition = { AppAnimations.slideEnterRight },
-            exitTransition = { AppAnimations.slideExitLeft },
-            popEnterTransition = { AppAnimations.slideEnterLeft },
-            popExitTransition = { AppAnimations.slideExitRight }
+            enterTransition = { AppAnimations.pushEnter },
+            exitTransition = { AppAnimations.pushExit },
+            popEnterTransition = { AppAnimations.popEnter },
+            popExitTransition = { AppAnimations.popExit }
         ) {
             RouteBuilderScreen(
                 onNavigateBack = {
